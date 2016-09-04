@@ -75,7 +75,8 @@ import java.util.stream.Collectors;
  * - Better stability + usability
  * - Applied newer code knowledge
  * - Added decorated window
- * - Made project open source! :)
+ * - Project is now open source! :)
+ * - Update to Java 8
  */
 
 public class ExpCalc extends Application {
@@ -117,7 +118,6 @@ public class ExpCalc extends Application {
 	private Label expensesPerDayText;
 	@FXML
 	private Label expensesPerHourText;
-
 
 	/**
 	 * Build the main part of the GUI.
