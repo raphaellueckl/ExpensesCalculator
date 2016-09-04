@@ -1,0 +1,130 @@
+<?import javafx.scene.control.TableView?>
+<?import javafx.scene.control.TableColumn?>
+<?import javafx.scene.control.cell.PropertyValueFactory?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.control.ComboBox?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.geometry.Insets?>
+<?import java.lang.String?>
+<?import javafx.collections.FXCollections?>
+<?import javafx.scene.layout.GridPane?>
+<?import java.lang.Integer?>
+
+<GridPane xmlns:fx="http://javafx.com/fxml">
+    <fx:define>
+        <Integer fx:id="buttonWidth" fx:value="75" />
+        <Integer fx:id="buttonHeight" fx:value="30" />
+        <Integer fx:id="minWidth" fx:value="75" />
+    </fx:define>
+    <children>
+        <VBox spacing="10" GridPane.columnIndex="0" GridPane.rowIndex="0">
+            <padding>
+                <Insets top="20" right="20" bottom="20" left="20" />
+            </padding>
+            <children>
+                <Button text="Save" onAction="#onSaveButton" minWidth="${minWidth}" prefWidth="${buttonWidth}" prefHeight="${buttonHeight}" />
+                <Button text="Load" onAction="#onLoadButton" minWidth="${minWidth}" prefWidth="${buttonWidth}" prefHeight="${buttonHeight}" />
+                <Button text="Edit" onAction="#onEditButton" minWidth="${minWidth}" prefWidth="${buttonWidth}" prefHeight="${buttonHeight}" />
+                <Button text="Delete" onAction="#onDeleteButton" minWidth="${minWidth}" prefWidth="${buttonWidth}" prefHeight="${buttonHeight}" />
+                <Button text="New" onAction="#onNewSheetButton" minWidth="${minWidth}" prefWidth="${buttonWidth}" prefHeight="${buttonHeight}" />
+            </children>
+        </VBox>
+        <VBox GridPane.columnIndex="1" GridPane.rowIndex="0" GridPane.hgrow="ALWAYS" GridPane.vgrow="ALWAYS">
+            <padding>
+                <Insets top="20" right="0" bottom="0" left="0" />
+            </padding>
+            <children>
+                <TableView fx:id="expensesTableView" editable="true" VBox.vgrow="ALWAYS">
+                    <columns>
+                        <TableColumn text="Title" prefWidth="${expensesTableView.width*0.35}">
+                            <cellValueFactory>
+                                <PropertyValueFactory property="title" />
+                            </cellValueFactory>
+                        </TableColumn>
+                        <TableColumn text="Category" prefWidth="${expensesTableView.width*0.25}">
+                            <cellValueFactory>
+                                <PropertyValueFactory property="category" />
+                            </cellValueFactory>
+                        </TableColumn>
+                        <TableColumn text="Period" prefWidth="${expensesTableView.width*0.25}">
+                            <cellValueFactory>
+                                <PropertyValueFactory property="period" />
+                            </cellValueFactory>
+                        </TableColumn>
+                        <TableColumn text="Value" prefWidth="${expensesTableView.width*0.15}">
+                            <cellValueFactory>
+                                <PropertyValueFactory property="value" />
+                            </cellValueFactory>
+                        </TableColumn>
+                    </columns>
+                </TableView>
+            </children>
+        </VBox>
+        <AnchorPane  GridPane.columnIndex="2" GridPane.rowIndex="0">
+            <children>
+                <VBox spacing="5" AnchorPane.topAnchor="0">
+                    <padding>
+                        <Insets top="20" right="20" bottom="20" left="20" />
+                    </padding>
+                    <children>
+                        <ImageView fx:id="logoImageView" />
+                        <Label text="Expenses per year" styleClass="app-labels" />
+                        <Label fx:id="expensesPerYearText" text="0" styleClass="app-values" />
+                        <Label text="Expenses per Month" styleClass="app-labels" />
+                        <Label fx:id="expensesPerMonthText" text="0" styleClass="app-values" />
+                        <Label text="Expenses per Week" styleClass="app-labels" />
+                        <Label fx:id="expensesPerWeekText" text="0" styleClass="app-values" />
+                        <Label text="Expenses per Day" styleClass="app-labels" />
+                        <Label fx:id="expensesPerDayText" text="0" styleClass="app-values" />
+                        <Label text="Expenses per Hour" styleClass="app-labels" />
+                        <Label fx:id="expensesPerHourText" text="0" styleClass="app-values" />
+                        <Label fx:id="errorMessage" />
+                    </children>
+                </VBox>
+            </children>
+        </AnchorPane>
+        <GridPane hgap="20" vgap="5" alignment="CENTER_LEFT" GridPane.columnIndex="1" GridPane.rowIndex="1">
+            <padding>
+                <Insets top="20" right="0" bottom="20" left="0" />
+            </padding>
+            <children>
+                <!-- column 0 -->
+                <Button text="Add" onAction="#onAddExpense" minWidth="${minWidth}" prefWidth="${buttonWidth}" prefHeight="${buttonHeight}" GridPane.columnIndex="0" GridPane.rowIndex="1" />
+                <Label text="Title" styleClass="app-labels" GridPane.columnIndex="1" GridPane.rowIndex="0" />
+                <TextField fx:id="expenseTitle" promptText="Title..." prefHeight="${buttonHeight}" GridPane.columnIndex="1" GridPane.rowIndex="1" />
+                <!-- column 1 -->
+                <Label text="Category" styleClass="app-labels" GridPane.columnIndex="2" GridPane.rowIndex="0" />
+                <ComboBox fx:id="expenseCategory" prefHeight="${buttonHeight}" GridPane.columnIndex="2" GridPane.rowIndex="1">
+                    <items>
+                        <FXCollections fx:factory="observableArrayList">
+                            <String fx:value="[None]" />
+                            <String fx:value="[Add a category...]" />
+                        </FXCollections>
+                    </items>
+                </ComboBox>
+                <TextField fx:id="addCategoryTextField" promptText="Title of new category..." visible="false" prefHeight="${buttonHeight}" GridPane.columnIndex="2" GridPane.rowIndex="2" />
+                <!-- column 2 -->
+                <Label text="Period" styleClass="app-labels" GridPane.columnIndex="3" GridPane.rowIndex="0" />
+                <ComboBox fx:id="expensePeriod" prefHeight="${buttonHeight}" GridPane.columnIndex="3" GridPane.rowIndex="1">
+                    <items>
+                        <FXCollections fx:factory="observableArrayList">
+                            <String fx:value="Year" />
+                            <String fx:value="6 Months" />
+                            <String fx:value="Quarter" />
+                            <String fx:value="Month" />
+                            <String fx:value="Week" />
+                            <String fx:value="Day" />
+                        </FXCollections>
+                    </items>
+                </ComboBox>
+                <!-- column 3 -->
+                <Label text="Value" styleClass="app-labels" GridPane.columnIndex="4" GridPane.rowIndex="0" />
+                <TextField fx:id="expenseValue" promptText="Value..."  prefHeight="${buttonHeight}" GridPane.columnIndex="4" GridPane.rowIndex="1" />
+            </children>
+        </GridPane>
+    </children>
+</GridPane>

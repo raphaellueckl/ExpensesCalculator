@@ -1,0 +1,7 @@
+.root {
+    -fx-background-image: url("background_exitdialog.jpg");
+}
+
+#save-on-exit-label {
+	-fx-font-size: 20px;
+}
