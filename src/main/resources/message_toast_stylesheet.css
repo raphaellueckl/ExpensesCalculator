@@ -1,0 +1,7 @@
+.error {
+    -fx-background-color: #0000FF;
+}
+
+.success {
+    -fx-background-color: #FF0000;
+}

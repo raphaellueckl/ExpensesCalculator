@@ -19,6 +19,7 @@ import javafx.stage.FileChooser;
 import javafx.stage.FileChooser.ExtensionFilter;
 import javafx.stage.Stage;
 import model.Expense;
+import model.MessageToast;
 
 import java.io.*;
 import java.nio.charset.Charset;
@@ -31,7 +32,8 @@ import java.util.stream.Collectors;
 
 /**
  * TODO:
- * - NONE-Eintrag in categorycombobox kann gel�scht werden (nur der default eintrag)
+ * - Make negative expenses: Possibility to declare income
+ * - Toast messages
  * 
  * History:
  * V1.0:
@@ -113,11 +115,11 @@ public class ExpCalc extends Application {
 	@FXML
 	private Label expensesPerWeekText;
 	@FXML
-	private Label errorMessage;
-	@FXML
 	private Label expensesPerDayText;
 	@FXML
 	private Label expensesPerHourText;
+	@FXML
+	private MessageToast errorMessage;
 
 	/**
 	 * Build the main part of the GUI.
@@ -188,7 +190,7 @@ public class ExpCalc extends Application {
 		} catch (Exception e) {
 			e.printStackTrace();
 			if (path != null) {
-				errorMessage.setText("Random\nError!");
+				errorMessage.showErrorMessage("Random\nError!");
 			}
 		}
 	}
@@ -209,7 +211,7 @@ public class ExpCalc extends Application {
 			loadFile(path.toString());
 		} catch (Exception e) {
 			if (path != null)
-				errorMessage.setText("Error!");
+				errorMessage.showErrorMessage("Error!");
 		}
 	}
 
@@ -331,7 +333,7 @@ public class ExpCalc extends Application {
 			}
 			hasPendingChanges = true;
 		} else {
-			errorMessage.setText("Some fields\naren't filled\ncorrectly!");
+			errorMessage.showErrorMessage("Some fields\naren't filled\ncorrectly!");
 		}
 
 
@@ -342,10 +344,10 @@ public class ExpCalc extends Application {
 			if (exp != null) {
 				expenseList.add(exp);
 			} else {
-				errorMessage.setText("Failure!");
+				errorMessage.showErrorMessage("Failure!");
 			}
 		} catch (Exception e) {
-			errorMessage.setText("No valid\nvalue!");
+			errorMessage.showErrorMessage("No valid\nvalue!");
 		}
 
 		addCategoryTextField.setText(EMPTY_STRING);
@@ -394,7 +396,7 @@ public class ExpCalc extends Application {
 			} else if (e.getPeriod().equals("Day")) {
 				sum += Double.parseDouble(e.getValue()) * 365;
 			} else {
-				errorMessage.setText("Calculating\nerror!");
+				errorMessage.showErrorMessage("Calculating\nerror!");
 			}
 		}
 
@@ -425,18 +427,18 @@ public class ExpCalc extends Application {
 				List<Expense> loadedExpenses = Arrays.asList(mapper.readValue(loadedJsonFile, Expense[].class));
 				expenseList.clear();
 				expenseList.addAll(loadedExpenses);
-		        errorMessage.setText(EMPTY_STRING);
+		        errorMessage.showErrorMessage(EMPTY_STRING);
 		        calculateValues();
 		        setUpCategoryComboBox();
 				hasPendingChanges = false;
 			} else {
-				errorMessage.setText("Invalid\nFile!");
+				errorMessage.showErrorMessage("Invalid\nFile!");
 			}
 		} catch (Exception e) {
 			if (path.endsWith(".json"))
-				errorMessage.setText("JSON file\ncorrupted!");
+				errorMessage.showErrorMessage("JSON file\ncorrupted!");
 			else if (path != null)
-				errorMessage.setText("Invalid\nFile!");
+				errorMessage.showErrorMessage("Invalid\nFile!");
 		}
 	}
 
@@ -483,7 +485,7 @@ public class ExpCalc extends Application {
 		@Override
 		public void onChanged(Change<? extends Expense> arg0) {
 			calculateValues();
-			errorMessage.setText(EMPTY_STRING);
+			errorMessage.showErrorMessage(EMPTY_STRING);
 		}
 	}
 	
