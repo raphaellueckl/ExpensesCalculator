@@ -2,11 +2,13 @@
 <?import javafx.scene.control.Label?>
 <?import javafx.geometry.Insets?>
 
-<VBox alignment="CENTER" xmlns:fx="http://javafx.com/fxml">
-    <padding>
-        <Insets top="25" right="25" bottom="25" left="25" />
-    </padding>
-    <children>
-        <Label fx:id="msgLabel" text="Jojammeasd" />
-    </children>
-</VBox>
+<fx:root type="javafx.scene.layout.VBox" xmlns:fx="http://javafx.com/fxml">
+    <VBox fx:id="messageToastBox" alignment="CENTER" xmlns:fx="http://javafx.com/fxml" maxWidth="160">
+        <padding>
+            <Insets top="25" right="25" bottom="25" left="25" />
+        </padding>
+        <children>
+            <Label fx:id="msgLabel" wrapText="true" />
+        </children>
+    </VBox>
+</fx:root>

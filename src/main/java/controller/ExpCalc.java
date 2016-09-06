@@ -168,6 +168,10 @@ public class ExpCalc extends Application {
 
 	@FXML
 	public void onSaveButton() {
+		if (expenseList.isEmpty()) {
+			errorMessage.showErrorMessage("Nothing to save!");
+			return;
+		}
 		if (path != null && !path.isFile() && !path.toString().endsWith(".json")) {
 			FileChooser fileChooser = new FileChooser();
 			fileChooser.setTitle("Save JSON-File");
@@ -182,11 +186,13 @@ public class ExpCalc extends Application {
 		}
 
 		try (
-			 OutputStreamWriter outputFile = new OutputStreamWriter(new FileOutputStream(path), Charset.forName("UTF8"));){
+			OutputStreamWriter outputFile = new OutputStreamWriter(new FileOutputStream(path), Charset.forName("UTF8"));){
 			final ObjectMapper mapper = new ObjectMapper();
 			final String jsonToSave = mapper.writerWithDefaultPrettyPrinter().writeValueAsString(expenseList);
 			outputFile.write(jsonToSave);
 			hasPendingChanges = false;
+
+			errorMessage.showSuccessMessage("Saved! :)");
 		} catch (Exception e) {
 			e.printStackTrace();
 			if (path != null) {

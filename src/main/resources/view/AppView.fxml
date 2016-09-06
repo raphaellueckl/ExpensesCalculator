@@ -65,7 +65,7 @@
                 </TableView>
             </children>
         </VBox>
-        <AnchorPane  GridPane.columnIndex="2" GridPane.rowIndex="0">
+        <AnchorPane GridPane.columnIndex="2" GridPane.rowIndex="0">
             <children>
                 <VBox spacing="5" AnchorPane.topAnchor="0">
                     <padding>
