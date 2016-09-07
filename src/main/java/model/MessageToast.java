@@ -1,11 +1,15 @@
 package model;
 
+import javafx.animation.Animation;
+import javafx.animation.KeyFrame;
+import javafx.animation.KeyValue;
+import javafx.animation.Timeline;
 import javafx.application.Platform;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.control.Label;
-import javafx.scene.layout.Background;
 import javafx.scene.layout.VBox;
+import javafx.util.Duration;
 
 import java.io.IOException;
 
@@ -34,22 +38,32 @@ public class MessageToast extends VBox {
         this.setVisible(true);
         this.msgLabel.setText(message);
         this.getStyleClass().clear();
-        this.getStyleClass().add("success");
-        new Thread(() -> {
-            try {
-                Thread.sleep(2000);
-                for (int i=0; i<10; ++i) {
-                    Thread.sleep(100);
-                    Platform.runLater(() -> {
-                        this.setOpacity(this.getOpacity()-0.1);
-                    });
-                }
-                MessageToast.this.setVisible(false);
-                MessageToast.this.setOpacity(1);
-            } catch (InterruptedException e) {
-                e.printStackTrace();
-            }
-        }).start();
+        this.getStyleClass().add("error");
+//        new Thread(() -> {
+//            try {
+//                Thread.sleep(2000);
+//                for (int i=0; i<10; ++i) {
+//                    Thread.sleep(100);
+//                    Platform.runLater(() -> {
+//                        this.setOpacity(this.getOpacity()-0.1);
+//                    });
+//                }
+//                MessageToast.this.setVisible(false);
+//                MessageToast.this.setOpacity(1);
+//            } catch (InterruptedException e) {
+//                e.printStackTrace();
+//            }
+//        }).start();
+        Timeline timeline = new Timeline();
+        KeyFrame key = new KeyFrame(Duration.millis(2000),
+                new KeyValue(this.opacityProperty(), 0));
+        timeline.getKeyFrames().add(key);
+        timeline.setDelay(Duration.seconds(5));
+        timeline.setOnFinished((ae) -> {
+            this.setVisible(false);
+            this.setOpacity(1);
+        });
+        timeline.play();
     }
 
     public void showSuccessMessage(String message) {

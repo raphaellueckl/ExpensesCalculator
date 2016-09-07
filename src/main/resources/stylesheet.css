@@ -57,11 +57,13 @@
 }
 
 .table-view {
+    /*-fx-background-color: transparent;*/
     -fx-background-color: rgba(153, 102, 51, 0.7);
 }
 
 .table-view:focused{
-    -fx-background-color: transparent;
+    /*-fx-background-color: transparent;*/
+    -fx-background-color: rgba(153, 102, 51, 0.7);
 }
 
 .table-view {
