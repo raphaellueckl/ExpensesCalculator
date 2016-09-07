@@ -56,7 +56,7 @@ public class MessageToast extends VBox {
         messageToastBox.setVisible(true);
         this.msgLabel.setText(message);
         this.getStyleClass().clear();
-        this.getStyleClass().add("error");
+        this.getStyleClass().add("success");
         new Thread(() -> {
             try {
                 Thread.sleep(2000);
@@ -66,6 +66,5 @@ public class MessageToast extends VBox {
             Platform.runLater(() -> messageToastBox.setVisible(false));
         }).start();
     }
-
 
 }
