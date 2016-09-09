@@ -433,7 +433,7 @@ public class ExpCalc extends Application {
 				List<Expense> loadedExpenses = Arrays.asList(mapper.readValue(loadedJsonFile, Expense[].class));
 				expenseList.clear();
 				expenseList.addAll(loadedExpenses);
-		        errorMessage.showErrorMessage(EMPTY_STRING);
+		        errorMessage.clear();
 		        calculateValues();
 		        setUpCategoryComboBox();
 				hasPendingChanges = false;
@@ -491,7 +491,7 @@ public class ExpCalc extends Application {
 		@Override
 		public void onChanged(Change<? extends Expense> arg0) {
 			calculateValues();
-			errorMessage.showErrorMessage(EMPTY_STRING);
+			errorMessage.clear();
 		}
 	}
 	

@@ -19,6 +19,7 @@ public class MessageToast extends VBox {
     @FXML private Label msgLabel;
 
     private Thread thread = null;
+    private Timeline timeline;
 
     public MessageToast() {
         FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/view/MessageToastView.fxml"));
@@ -32,29 +33,8 @@ public class MessageToast extends VBox {
         msgLabel.managedProperty().bind(this.visibleProperty());
         msgLabel.opacityProperty().bind(this.opacityProperty());
         this.getStylesheets().add("/message_toast_stylesheet.css");
-    }
 
-    public void showErrorMessage(String message) {
-        this.setVisible(true);
-        this.msgLabel.setText(message);
-        this.getStyleClass().clear();
-        this.getStyleClass().add("error");
-//        new Thread(() -> {
-//            try {
-//                Thread.sleep(2000);
-//                for (int i=0; i<10; ++i) {
-//                    Thread.sleep(100);
-//                    Platform.runLater(() -> {
-//                        this.setOpacity(this.getOpacity()-0.1);
-//                    });
-//                }
-//                MessageToast.this.setVisible(false);
-//                MessageToast.this.setOpacity(1);
-//            } catch (InterruptedException e) {
-//                e.printStackTrace();
-//            }
-//        }).start();
-        Timeline timeline = new Timeline();
+        timeline = new Timeline();
         KeyFrame key = new KeyFrame(Duration.millis(2000),
                 new KeyValue(this.opacityProperty(), 0));
         timeline.getKeyFrames().add(key);
@@ -63,6 +43,21 @@ public class MessageToast extends VBox {
             this.setVisible(false);
             this.setOpacity(1);
         });
+    }
+
+    private void disableMessageToast() {
+        this.setVisible(false);
+        this.setOpacity(1);
+    }
+
+    public void showErrorMessage(String message) {
+        this.setVisible(true);
+        this.msgLabel.setText(message);
+        this.getStyleClass().clear();
+        this.getStyleClass().add("error");
+
+        clear();
+        this.setVisible(true);
         timeline.play();
     }
 
@@ -71,14 +66,16 @@ public class MessageToast extends VBox {
         this.msgLabel.setText(message);
         this.getStyleClass().clear();
         this.getStyleClass().add("success");
-        new Thread(() -> {
-            try {
-                Thread.sleep(2000);
-            } catch (InterruptedException e) {
-                e.printStackTrace();
-            }
-            Platform.runLater(() -> messageToastBox.setVisible(false));
-        }).start();
+
+        clear();
+        this.setVisible(true);
+        timeline.play();
+    }
+
+    public void clear() {
+        timeline.stop();
+        this.setVisible(false);
+        this.setOpacity(1);
     }
 
 }
