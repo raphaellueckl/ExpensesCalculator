@@ -85,6 +85,7 @@ public class ExpCalc extends Application {
 
 	private static final String EMPTY_STRING = "";
 
+	private FileService fileService;
 	private File path = getInitialDocumentPath();
 	private GridPane mainView;
 	private ObservableList<Expense> expenseList;
@@ -94,32 +95,19 @@ public class ExpCalc extends Application {
 	private double xOffset = 0;
 	private double yOffset = 0;
 
-	@FXML
-	private TableView<Expense> expensesTableView;
-	@FXML
-	private ImageView logoImageView;
-	@FXML
-	private TextField expenseTitle;
-	@FXML
-	private ComboBox<String> expensePeriod;
-	@FXML
-	private ComboBox<String> expenseCategory;
-	@FXML
-	private TextField expenseValue;
-	@FXML
-	private TextField addCategoryTextField;
-	@FXML
-	private Label expensesPerYearText;
-	@FXML
-	private Label expensesPerMonthText;
-	@FXML
-	private Label expensesPerWeekText;
-	@FXML
-	private Label expensesPerDayText;
-	@FXML
-	private Label expensesPerHourText;
-	@FXML
-	private MessageToast errorMessage;
+	@FXML private TableView<Expense> expensesTableView;
+	@FXML private ImageView logoImageView;
+	@FXML private TextField expenseTitle;
+	@FXML private ComboBox<String> expensePeriod;
+	@FXML private ComboBox<String> expenseCategory;
+	@FXML private TextField expenseValue;
+	@FXML private TextField addCategoryTextField;
+	@FXML private Label expensesPerYearText;
+	@FXML private Label expensesPerMonthText;
+	@FXML private Label expensesPerWeekText;
+	@FXML private Label expensesPerDayText;
+	@FXML private Label expensesPerHourText;
+	@FXML private MessageToast errorMessage;
 
 	/**
 	 * Build the main part of the GUI.
@@ -134,6 +122,8 @@ public class ExpCalc extends Application {
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
+
+		fileService = new FileService(errorMessage);
 
 		expenseList = FXCollections.observableArrayList();
 
@@ -185,20 +175,7 @@ public class ExpCalc extends Application {
 			path = new File(path.toString() + ".json");
 		}
 
-		try (
-			OutputStreamWriter outputFile = new OutputStreamWriter(new FileOutputStream(path), Charset.forName("UTF8"));){
-			final ObjectMapper mapper = new ObjectMapper();
-			final String jsonToSave = mapper.writerWithDefaultPrettyPrinter().writeValueAsString(expenseList);
-			outputFile.write(jsonToSave);
-			hasPendingChanges = false;
-
-			errorMessage.showSuccessMessage("Saved! :)");
-		} catch (Exception e) {
-			e.printStackTrace();
-			if (path != null) {
-				errorMessage.showErrorMessage("Random\nError!");
-			}
-		}
+		if (path != null) fileService.writeListToJson(path, expenseList);
 	}
 
 	@FXML
@@ -215,6 +192,9 @@ public class ExpCalc extends Application {
 			if (path == null) return;
 
 			loadFile(path.toString());
+			calculateValues();
+			setUpCategoryComboBox();
+			hasPendingChanges = false;
 		} catch (Exception e) {
 			if (path != null)
 				errorMessage.showErrorMessage("Error!");
@@ -421,31 +401,31 @@ public class ExpCalc extends Application {
 	/**
 	 * Loads a file by from the path parameter. If the file isn't conform, an errormessage will be displayed.
 	 */
-	public void loadFile(String path) {
-		try {
-			if (path.endsWith(".json")) {
-				List<String> loadedJsonAsList = Files.readAllLines(Paths.get(path));
-
-				final String loadedJsonFile = loadedJsonAsList.stream().collect(Collectors.joining());
-
-				ObjectMapper mapper = new ObjectMapper();
-
-				List<Expense> loadedExpenses = Arrays.asList(mapper.readValue(loadedJsonFile, Expense[].class));
-				expenseList.clear();
-				expenseList.addAll(loadedExpenses);
-		        errorMessage.clear();
-		        calculateValues();
-		        setUpCategoryComboBox();
-				hasPendingChanges = false;
-			} else {
-				errorMessage.showErrorMessage("Invalid\nFile!");
-			}
-		} catch (Exception e) {
-			if (path.endsWith(".json"))
-				errorMessage.showErrorMessage("JSON file\ncorrupted!");
-			else if (path != null)
-				errorMessage.showErrorMessage("Invalid\nFile!");
-		}
+	public List<Expense> loadFile(String path) {
+//		try {
+//			if (path.endsWith(".json")) {
+//				List<String> loadedJsonAsList = Files.readAllLines(Paths.get(path));
+//
+//				final String loadedJsonFile = loadedJsonAsList.stream().collect(Collectors.joining());
+//
+//				ObjectMapper mapper = new ObjectMapper();
+//
+//				List<Expense> loadedExpenses = Arrays.asList(mapper.readValue(loadedJsonFile, Expense[].class));
+//				expenseList.clear();
+//				expenseList.addAll(loadedExpenses);
+//		        errorMessage.clear();
+//		        calculateValues();
+//		        setUpCategoryComboBox();
+//				hasPendingChanges = false;
+//			} else {
+//				errorMessage.showErrorMessage("Invalid\nFile!");
+//			}
+//		} catch (Exception e) {
+//			if (path.endsWith(".json"))
+//				errorMessage.showErrorMessage("JSON file\ncorrupted!");
+//			else if (path != null)
+//				errorMessage.showErrorMessage("Invalid\nFile!");
+//		}
 	}
 
 	private File getInitialDocumentPath() {
@@ -526,9 +506,14 @@ public class ExpCalc extends Application {
                 for (File file:db.getFiles()) {
                     filePath = file.getAbsolutePath();
                 }
-                loadFile(filePath);
-            }
-            event.setDropCompleted(success);
+				List<Expense> loadedExpenses = loadFile(filePath);
+				expenseList.clear();
+				expenseList.addAll(loadedExpenses);
+				calculateValues();
+				setUpCategoryComboBox();
+				hasPendingChanges = false;
+			}
+			event.setDropCompleted(success);
             event.consume();
         }
 	}

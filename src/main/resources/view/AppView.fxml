@@ -67,22 +67,26 @@
         </VBox>
         <AnchorPane GridPane.columnIndex="2" GridPane.rowIndex="0">
             <children>
-                <VBox spacing="5" AnchorPane.topAnchor="0">
+                <VBox maxHeight="Infinity" spacing="50">
                     <padding>
                         <Insets top="20" right="20" bottom="20" left="20" />
                     </padding>
                     <children>
-                        <ImageView fx:id="logoImageView" />
-                        <Label text="Expenses per year" styleClass="app-labels" />
-                        <Label fx:id="expensesPerYearText" text="0" styleClass="app-values" />
-                        <Label text="Expenses per Month" styleClass="app-labels" />
-                        <Label fx:id="expensesPerMonthText" text="0" styleClass="app-values" />
-                        <Label text="Expenses per Week" styleClass="app-labels" />
-                        <Label fx:id="expensesPerWeekText" text="0" styleClass="app-values" />
-                        <Label text="Expenses per Day" styleClass="app-labels" />
-                        <Label fx:id="expensesPerDayText" text="0" styleClass="app-values" />
-                        <Label text="Expenses per Hour" styleClass="app-labels" />
-                        <Label fx:id="expensesPerHourText" text="0" styleClass="app-values" />
+                        <VBox spacing="5" AnchorPane.topAnchor="0">
+                            <children>
+                                <ImageView fx:id="logoImageView" />
+                                <Label text="Expenses per year" styleClass="app-labels" />
+                                <Label fx:id="expensesPerYearText" text="0" styleClass="app-values" />
+                                <Label text="Expenses per Month" styleClass="app-labels" />
+                                <Label fx:id="expensesPerMonthText" text="0" styleClass="app-values" />
+                                <Label text="Expenses per Week" styleClass="app-labels" />
+                                <Label fx:id="expensesPerWeekText" text="0" styleClass="app-values" />
+                                <Label text="Expenses per Day" styleClass="app-labels" />
+                                <Label fx:id="expensesPerDayText" text="0" styleClass="app-values" />
+                                <Label text="Expenses per Hour" styleClass="app-labels" />
+                                <Label fx:id="expensesPerHourText" text="0" styleClass="app-values" />
+                            </children>
+                        </VBox>
                         <MessageToast fx:id="errorMessage" />
                     </children>
                 </VBox>
