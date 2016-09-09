@@ -18,7 +18,6 @@ public class MessageToast extends VBox {
     @FXML private VBox messageToastBox;
     @FXML private Label msgLabel;
 
-    private Thread thread = null;
     private Timeline timeline;
 
     public MessageToast() {
@@ -32,8 +31,13 @@ public class MessageToast extends VBox {
         }
         msgLabel.managedProperty().bind(this.visibleProperty());
         msgLabel.opacityProperty().bind(this.opacityProperty());
+
         this.getStylesheets().add("/message_toast_stylesheet.css");
 
+        initAnimation();
+    }
+
+    private void initAnimation() {
         timeline = new Timeline();
         KeyFrame key = new KeyFrame(Duration.millis(2000),
                 new KeyValue(this.opacityProperty(), 0));
