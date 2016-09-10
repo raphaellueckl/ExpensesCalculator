@@ -91,8 +91,6 @@ import java.util.stream.Collectors;
 
 public class ExpCalc extends Application {
 
-	private static final String EMPTY_STRING = "";
-
 	private FileService fileService;
 	private File path = getInitialDocumentPath();
 	private GridPane mainView;
@@ -193,7 +191,7 @@ public class ExpCalc extends Application {
 			path = path.getParentFile();
 		}
 		try {
-			FileChooser fileChooser = new FileChooser();
+			final FileChooser fileChooser = new FileChooser();
 			fileChooser.setTitle("Load JSON-File");
 			fileChooser.getExtensionFilters().add(new ExtensionFilter("JSON-Document", "*.json"));
 			if (path != null && path.isDirectory()) fileChooser.setInitialDirectory(path);
@@ -294,63 +292,55 @@ public class ExpCalc extends Application {
 	 */
 	public void addExpense() {
 		//Checks if the "Category"-combobox already has the String from the "Category-Textfield". If not, it will be added to the combobox.
-		if (addCategoryTextField.getText() != null && !addCategoryTextField.getText().equals(EMPTY_STRING)) {
+		if (addCategoryTextField.getText() != null && !addCategoryTextField.getText().isEmpty()) {
 			boolean contained = false;
 
-			for (int i = 0; i< expenseCategory.getItems().size(); ++i) {
-				if (expenseCategory.getItems().get(i).equals(addCategoryTextField.getText())) {
-					contained = true;
-					break;
-				}
-			}
-			if (!contained) {
-				expenseCategory.getItems().addAll(addCategoryTextField.getText());
+			if (!expenseCategory.getItems().contains(addCategoryTextField.getText())) {
+				expenseCategory.getItems().add(addCategoryTextField.getText());
 			}
 		}
 		
 		//Everything is ok, if the value of the "Value"-Field could be parsed to a double. The "Category"-Combobox is will be set to the newest entry.
 		//The filled fields will be resetted.
+		double expValue = 0d;
 		try {
-			double expValue = Double.parseDouble(expenseValue.getText());
+			expValue = Double.parseDouble(expenseValue.getText());
 			if (isIncome.isSelected()) {
 				expValue -= expValue * 2;
 			}
-				expenseList.add(exp);
 		} catch (Exception e) {
-			errorMessage.showErrorMessage("No valid\nvalue!");
+			errorMessage.showErrorMessage("No valid value!");
 			return;
 		}
 		
 		//Check the fields and create a new "Expense".
 		Expense exp = null;
 
-		if (!expenseTitle.getText().equals(EMPTY_STRING) && !expenseValue.getText().equals(EMPTY_STRING)) {
-			if (!addCategoryTextField.getText().equals(EMPTY_STRING)) {
-				exp = new Expense(expenseTitle.getText(), expenseValue.getText(), expensePeriod.getValue(), addCategoryTextField.getText());
+		if (!expenseTitle.getText().isEmpty() && !expenseValue.getText().isEmpty()) {
+			if (addCategoryTextField.getText() != null && !addCategoryTextField.getText().isEmpty()) {
+				exp = new Expense(expenseTitle.getText(), String.valueOf(expValue), expensePeriod.getValue(), addCategoryTextField.getText());
 
 			} else if (expenseCategory.getValue().equals("[Add a category...]")) {
 				expenseCategory.getSelectionModel().selectFirst();
-				exp = new Expense(expenseTitle.getText(), expenseValue.getText(), expensePeriod.getValue(), expenseCategory.getValue());
+				exp = new Expense(expenseTitle.getText(), String.valueOf(expValue), expensePeriod.getValue(), expenseCategory.getValue());
 
 			} else {
-				exp = new Expense(expenseTitle.getText(), expenseValue.getText(), expensePeriod.getValue(), expenseCategory.getValue());
+				exp = new Expense(expenseTitle.getText(), String.valueOf(expValue), expensePeriod.getValue(), expenseCategory.getValue());
 
 			}
+			expenseList.add(exp);
 			hasPendingChanges = true;
 		} else {
-			errorMessage.showErrorMessage("Some fields\naren't filled\ncorrectly!");
+			errorMessage.showErrorMessage("Some fields aren't filled correctly!");
 		}
 
-
-
-
-		addCategoryTextField.setText(EMPTY_STRING);
+		addCategoryTextField.setText(null);
 		addCategoryTextField.setVisible(false);
 
-		expenseTitle.setText(EMPTY_STRING);
+		expenseTitle.setText(null);
 		expenseCategory.getSelectionModel().selectLast();
 		expensePeriod.getSelectionModel().selectFirst();
-		expenseValue.setText(EMPTY_STRING);
+		expenseValue.setText(null);
 		expenseTitle.requestFocus();
 
 		hasPendingChanges = true;
@@ -390,20 +380,20 @@ public class ExpCalc extends Application {
 			} else if (e.getPeriod().equals("Day")) {
 				sum += Double.parseDouble(e.getValue()) * 365;
 			} else {
-				errorMessage.showErrorMessage("Calculating\nerror!");
+				errorMessage.showErrorMessage("Calculating error!");
 			}
 		}
 
-		DecimalFormat  dfHour = new DecimalFormat("#.####");
-		DecimalFormat  dfDay = new DecimalFormat("#.##");
-		DecimalFormat  dfWeek = new DecimalFormat("#.##");
-		DecimalFormat  dfMonth = new DecimalFormat("#");
-		DecimalFormat  dfYear = new DecimalFormat("#");
-		expensesPerHourText.setText(dfHour.format(sum / 8760).toString());
-		expensesPerDayText.setText(dfDay.format(sum / 365).toString());
-		expensesPerWeekText.setText(dfWeek.format(sum / 52).toString());
-		expensesPerMonthText.setText(dfMonth.format(sum / 12).toString());
-		expensesPerYearText.setText(dfYear.format(sum).toString());
+		DecimalFormat  hourFormat = new DecimalFormat("#.####");
+		DecimalFormat  dayFormat = new DecimalFormat("#.##");
+		DecimalFormat  weekFormat = new DecimalFormat("#.##");
+		DecimalFormat  monthFormat = new DecimalFormat("#");
+		DecimalFormat  yearFormat = new DecimalFormat("#");
+		expensesPerHourText.setText(hourFormat.format(sum / 8760).toString());
+		expensesPerDayText.setText(dayFormat.format(sum / 365).toString());
+		expensesPerWeekText.setText(weekFormat.format(sum / 52).toString());
+		expensesPerMonthText.setText(monthFormat.format(sum / 12).toString());
+		expensesPerYearText.setText(yearFormat.format(sum).toString());
 	}
 
 	/**
@@ -432,7 +422,7 @@ public class ExpCalc extends Application {
 			if (expenseCategory.getValue().equals("[Add a category...]")) {
 		        addCategoryTextField.setVisible(true);
 			} else {
-				addCategoryTextField.setText(EMPTY_STRING);
+				addCategoryTextField.setText(null);
 				addCategoryTextField.setVisible(false);
 			}
 		}
