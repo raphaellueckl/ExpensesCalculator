@@ -15,6 +15,7 @@
 <?import java.lang.Integer?>
 <?import model.MessageToast?>
 
+<?import javafx.scene.control.CheckBox?>
 <GridPane xmlns:fx="http://javafx.com/fxml">
     <fx:define>
         <Integer fx:id="buttonWidth" fx:value="75" />
@@ -98,6 +99,7 @@
             </padding>
             <children>
                 <!-- column 0 -->
+                <CheckBox fx:id="isIncome" text="Income" GridPane.columnIndex="0" GridPane.rowIndex="0" />
                 <Button text="Add" onAction="#onAddExpense" minWidth="${minWidth}" prefWidth="${buttonWidth}" prefHeight="${buttonHeight}" GridPane.columnIndex="0" GridPane.rowIndex="1" />
                 <Label text="Title" styleClass="app-labels" GridPane.columnIndex="1" GridPane.rowIndex="0" />
                 <TextField fx:id="expenseTitle" promptText="Title..." prefHeight="${buttonHeight}" GridPane.columnIndex="1" GridPane.rowIndex="1" />
@@ -126,6 +128,7 @@
                         </FXCollections>
                     </items>
                 </ComboBox>
+                <CheckBox fx:id="isIncome" text="Income" />
                 <!-- column 3 -->
                 <Label text="Value" styleClass="app-labels" GridPane.columnIndex="4" GridPane.rowIndex="0" />
                 <TextField fx:id="expenseValue" promptText="Value..."  prefHeight="${buttonHeight}" GridPane.columnIndex="4" GridPane.rowIndex="1" />

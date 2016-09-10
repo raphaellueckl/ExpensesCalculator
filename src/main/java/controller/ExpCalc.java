@@ -79,6 +79,14 @@ import java.util.stream.Collectors;
  * - Added decorated window
  * - Project is now open source! :)
  * - Update to Java 8
+ *
+ * V2.1.0:
+ * - New Feature: Toast-Messages containing information (error and success messages)
+ * - Code improvements & bug fixes.
+ *
+ * V2.2.0
+ * - New Feature: You can now add incomes, not just expenses.
+ * - Optimized the window-drag-movement for Windows 10.
  */
 
 public class ExpCalc extends Application {
@@ -192,9 +200,7 @@ public class ExpCalc extends Application {
 			if (path == null) return;
 
 			loadFile(path.toString());
-			calculateValues();
-			setUpCategoryComboBox();
-			hasPendingChanges = false;
+
 		} catch (Exception e) {
 			if (path != null)
 				errorMessage.showErrorMessage("Error!");
@@ -275,8 +281,8 @@ public class ExpCalc extends Application {
 		});
 
 		mainView.setOnMouseDragged(event -> {
-			stage.setX(event.getScreenX() - xOffset);
-			stage.setY(event.getScreenY() - yOffset);
+			stage.setX(event.getScreenX() - xOffset - 9);
+			stage.setY(event.getScreenY() - yOffset - 37);
 		});
 
 		expenseList.addListener(new ListListener());
@@ -401,31 +407,13 @@ public class ExpCalc extends Application {
 	/**
 	 * Loads a file by from the path parameter. If the file isn't conform, an errormessage will be displayed.
 	 */
-	public List<Expense> loadFile(String path) {
-//		try {
-//			if (path.endsWith(".json")) {
-//				List<String> loadedJsonAsList = Files.readAllLines(Paths.get(path));
-//
-//				final String loadedJsonFile = loadedJsonAsList.stream().collect(Collectors.joining());
-//
-//				ObjectMapper mapper = new ObjectMapper();
-//
-//				List<Expense> loadedExpenses = Arrays.asList(mapper.readValue(loadedJsonFile, Expense[].class));
-//				expenseList.clear();
-//				expenseList.addAll(loadedExpenses);
-//		        errorMessage.clear();
-//		        calculateValues();
-//		        setUpCategoryComboBox();
-//				hasPendingChanges = false;
-//			} else {
-//				errorMessage.showErrorMessage("Invalid\nFile!");
-//			}
-//		} catch (Exception e) {
-//			if (path.endsWith(".json"))
-//				errorMessage.showErrorMessage("JSON file\ncorrupted!");
-//			else if (path != null)
-//				errorMessage.showErrorMessage("Invalid\nFile!");
-//		}
+	public void loadFile(String path) {
+		final List<Expense> loadedExpenses = fileService.loadFile(path.toString());
+		expenseList.clear();
+		expenseList.addAll(loadedExpenses);
+		calculateValues();
+		setUpCategoryComboBox();
+		hasPendingChanges = false;
 	}
 
 	private File getInitialDocumentPath() {
@@ -506,11 +494,8 @@ public class ExpCalc extends Application {
                 for (File file:db.getFiles()) {
                     filePath = file.getAbsolutePath();
                 }
-				List<Expense> loadedExpenses = loadFile(filePath);
-				expenseList.clear();
-				expenseList.addAll(loadedExpenses);
-				calculateValues();
-				setUpCategoryComboBox();
+                loadFile(filePath);
+
 				hasPendingChanges = false;
 			}
 			event.setDropCompleted(success);

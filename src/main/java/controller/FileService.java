@@ -42,22 +42,22 @@ public class FileService {
         }
     }
 
-    public boolean readListFromJson(File path) {
-        try {
-            FileChooser fileChooser = new FileChooser();
-            fileChooser.setTitle("Load JSON-File");
-            fileChooser.getExtensionFilters().add(new FileChooser.ExtensionFilter("JSON-Document", "*.json"));
-            if (path != null && path.isDirectory()) fileChooser.setInitialDirectory(path);
-            path = fileChooser.showOpenDialog(new Stage());
-            if (path == null) return false;
-
-            loadFile(path.toString());
-
-        } catch (Exception e) {
-            if (path != null)
-                errorMessage.showErrorMessage("Error!");
-        }
-    }
+//    public boolean readListFromJson(File path) {
+//        try {
+//            FileChooser fileChooser = new FileChooser();
+//            fileChooser.setTitle("Load JSON-File");
+//            fileChooser.getExtensionFilters().add(new FileChooser.ExtensionFilter("JSON-Document", "*.json"));
+//            if (path != null && path.isDirectory()) fileChooser.setInitialDirectory(path);
+//            path = fileChooser.showOpenDialog(new Stage());
+//            if (path == null) return false;
+//
+//            loadFile(path.toString());
+//
+//        } catch (Exception e) {
+//            if (path != null)
+//                errorMessage.showErrorMessage("Error!");
+//        }
+//    }
 
     /**
      * Loads a file by from the path parameter. If the file isn't conform, an errormessage will be displayed.
@@ -85,4 +85,5 @@ public class FileService {
         }
         return null;
     }
+
 }
