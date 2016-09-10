@@ -116,6 +116,7 @@ public class ExpCalc extends Application {
 	@FXML private Label expensesPerDayText;
 	@FXML private Label expensesPerHourText;
 	@FXML private MessageToast errorMessage;
+	@FXML private CheckBox isIncome;
 
 	/**
 	 * Build the main part of the GUI.
@@ -292,7 +293,7 @@ public class ExpCalc extends Application {
 	 * Adds an "Expense" to the list.
 	 */
 	public void addExpense() {
-		//Checks if the "Caregory"-combobox already has the String from the "Category-Textfield". If not, it will be added to the combobox.
+		//Checks if the "Category"-combobox already has the String from the "Category-Textfield". If not, it will be added to the combobox.
 		if (addCategoryTextField.getText() != null && !addCategoryTextField.getText().equals(EMPTY_STRING)) {
 			boolean contained = false;
 
@@ -306,9 +307,21 @@ public class ExpCalc extends Application {
 				expenseCategory.getItems().addAll(addCategoryTextField.getText());
 			}
 		}
-
+		
+		//Everything is ok, if the value of the "Value"-Field could be parsed to a double. The "Category"-Combobox is will be set to the newest entry.
+		//The filled fields will be resetted.
+		try {
+			double expValue = Double.parseDouble(expenseValue.getText());
+			if (isIncome.isSelected()) {
+				expValue -= expValue * 2;
+			}
+				expenseList.add(exp);
+		} catch (Exception e) {
+			errorMessage.showErrorMessage("No valid\nvalue!");
+			return;
+		}
+		
 		//Check the fields and create a new "Expense".
-
 		Expense exp = null;
 
 		if (!expenseTitle.getText().equals(EMPTY_STRING) && !expenseValue.getText().equals(EMPTY_STRING)) {
@@ -329,18 +342,7 @@ public class ExpCalc extends Application {
 		}
 
 
-		//Everything is ok, if the value of the "Value"-Field could be parsed to a double. The "Category"-Combobox is will be set to the newest entry.
-		//The filled fields will be resetted.
-		try {
-			Double.parseDouble(expenseValue.getText());
-			if (exp != null) {
-				expenseList.add(exp);
-			} else {
-				errorMessage.showErrorMessage("Failure!");
-			}
-		} catch (Exception e) {
-			errorMessage.showErrorMessage("No valid\nvalue!");
-		}
+
 
 		addCategoryTextField.setText(EMPTY_STRING);
 		addCategoryTextField.setVisible(false);

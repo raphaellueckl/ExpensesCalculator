@@ -51,6 +51,11 @@
     -fx-font-size: 20px;
 }
 
+.check-box {
+    -fx-text-fill: #ee8822;
+    -fx-font-size: 18px;
+}
+
 .app-values {
     -fx-text-fill: #00BBFF;
     -fx-font-size: 20;
