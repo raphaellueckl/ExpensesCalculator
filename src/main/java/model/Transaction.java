@@ -3,16 +3,16 @@ package model;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;
 
-public class Expense {
+public class Transaction {
 
 	private StringProperty title = new SimpleStringProperty();
 	private StringProperty category = new SimpleStringProperty();
 	private StringProperty period = new SimpleStringProperty();
 	private StringProperty value = new SimpleStringProperty();
 
-	public Expense() {}	//Default constructor is needed for JSON-handling
+	public Transaction() {}	//Default constructor is needed for JSON-handling
 
-	public Expense(String title, String value, String period, String category) {
+	public Transaction(String title, String value, String period, String category) {
 		this.title = new SimpleStringProperty(title);
 		this.value = new SimpleStringProperty(value);
 		this.period = new SimpleStringProperty(period);

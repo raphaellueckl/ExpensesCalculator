@@ -2,10 +2,7 @@ package controller;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import javafx.collections.ObservableList;
-import javafx.stage.FileChooser;
-import javafx.stage.Stage;
-import model.Expense;
-import model.MessageToast;
+import model.Transaction;
 
 import java.io.File;
 import java.io.FileOutputStream;
@@ -25,10 +22,10 @@ public class FileService {
         this.errorMessage = errorMessage;
     }
 
-    public boolean writeListToJson(File path, ObservableList<Expense> expenseList) {
+    public boolean writeListToJson(File path, ObservableList<Transaction> transactionList) {
         try (OutputStreamWriter outputFile = new OutputStreamWriter(new FileOutputStream(path), Charset.forName("UTF8"))){
             final ObjectMapper mapper = new ObjectMapper();
-            final String jsonToSave = mapper.writerWithDefaultPrettyPrinter().writeValueAsString(expenseList);
+            final String jsonToSave = mapper.writerWithDefaultPrettyPrinter().writeValueAsString(transactionList);
             outputFile.write(jsonToSave);
 
             errorMessage.showSuccessMessage("Saved! :)");
@@ -62,7 +59,7 @@ public class FileService {
     /**
      * Loads a file by from the path parameter. If the file isn't conform, an errormessage will be displayed.
      */
-    public List<Expense> loadFile(String path) {
+    public List<Transaction> loadFile(String path) {
         try {
             if (path.endsWith(".json")) {
                 List<String> loadedJsonAsList = Files.readAllLines(Paths.get(path));
@@ -71,9 +68,9 @@ public class FileService {
 
                 ObjectMapper mapper = new ObjectMapper();
 
-                List<Expense> loadedExpenses = Arrays.asList(mapper.readValue(loadedJsonFile, Expense[].class));
+                List<Transaction> loadedEntities = Arrays.asList(mapper.readValue(loadedJsonFile, Transaction[].class));
                 errorMessage.clear();
-                return loadedExpenses;
+                return loadedEntities;
             } else {
                 errorMessage.showErrorMessage("Invalid\nFile!");
             }

@@ -1,6 +1,6 @@
 package controller;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
+import com.sun.rowset.internal.Row;
 import javafx.application.Application;
 import javafx.collections.FXCollections;
 import javafx.collections.ListChangeListener;
@@ -18,17 +18,13 @@ import javafx.scene.layout.GridPane;
 import javafx.stage.FileChooser;
 import javafx.stage.FileChooser.ExtensionFilter;
 import javafx.stage.Stage;
-import model.Expense;
-import model.MessageToast;
+import model.Transaction;
 
 import java.io.*;
-import java.nio.charset.Charset;
-import java.nio.file.Files;
-import java.nio.file.Paths;
 import java.text.DecimalFormat;
 import java.util.Arrays;
+import java.util.Comparator;
 import java.util.List;
-import java.util.stream.Collectors;
 
 /**
  * TODO:
@@ -94,14 +90,14 @@ public class ExpCalc extends Application {
 	private FileService fileService;
 	private File path = getInitialDocumentPath();
 	private GridPane mainView;
-	private ObservableList<Expense> expenseList;
+	private ObservableList<Transaction> transactionList;
 
 	private boolean hasPendingChanges = false;
 
 	private double xOffset = 0;
 	private double yOffset = 0;
 
-	@FXML private TableView<Expense> expensesTableView;
+	@FXML private TableView<Transaction> expensesTableView;
 	@FXML private ImageView logoImageView;
 	@FXML private TextField expenseTitle;
 	@FXML private ComboBox<String> expensePeriod;
@@ -132,11 +128,21 @@ public class ExpCalc extends Application {
 
 		fileService = new FileService(errorMessage);
 
-		expenseList = FXCollections.observableArrayList();
+		transactionList = FXCollections.observableArrayList();
 
 		expensePeriod.getSelectionModel().selectFirst();
 
-		expensesTableView.setItems(expenseList);
+		expensesTableView.setItems(transactionList);
+
+		expensesTableView.setSortPolicy(
+			Comparator<Transaction> comparator = (a, b) -> {
+				if (a.getValue().contains("-") ^ b.getValue().contains("-")) {
+					return a.getValue().contains("-") ? 1 : -1;
+				}
+				return 0;
+			}
+		);
+
 
 		setUpCategoryComboBox();
 		buildListeners(stage);
@@ -144,7 +150,7 @@ public class ExpCalc extends Application {
 		//Adding the logo...
 		logoImageView.setImage(new Image(getClass().getResourceAsStream("/nubage_logo.png")));
 
-		Scene scene = new Scene(mainView, 1200, 800);
+		final Scene scene = new Scene(mainView, 1200, 800);
 		scene.setOnKeyReleased(new KeyHandler());
 		scene.setOnDragOver(new DragOverHandler());
 		scene.setOnDragDropped(new FileDragHandler());
@@ -165,7 +171,7 @@ public class ExpCalc extends Application {
 
 	@FXML
 	public void onSaveButton() {
-		if (expenseList.isEmpty()) {
+		if (transactionList.isEmpty()) {
 			errorMessage.showErrorMessage("Nothing to save!");
 			return;
 		}
@@ -182,7 +188,7 @@ public class ExpCalc extends Application {
 			path = new File(path.toString() + ".json");
 		}
 
-		if (path != null) fileService.writeListToJson(path, expenseList);
+		if (path != null) fileService.writeListToJson(path, transactionList);
 	}
 
 	@FXML
@@ -208,28 +214,28 @@ public class ExpCalc extends Application {
 
 	@FXML
 	public void onEditButton() {
-		TableView.TableViewSelectionModel<Expense> selectionModel = expensesTableView.getSelectionModel();
+		TableView.TableViewSelectionModel<Transaction> selectionModel = expensesTableView.getSelectionModel();
 		ObservableList selectedCells = selectionModel.getSelectedCells();
 		TablePosition tablePosition = (TablePosition) selectedCells.get(0);
 
 		int row = tablePosition.getRow();
-		expenseTitle.setText(expenseList.get(row).getTitle());
+		expenseTitle.setText(transactionList.get(row).getTitle());
 		for (int i = 0; i< expensePeriod.getItems().size(); ++i) {
-			if (expensePeriod.getItems().get(i).equals(expenseList.get(row).getPeriod())) {
-				expensePeriod.setValue(expenseList.get(row).getPeriod());
+			if (expensePeriod.getItems().get(i).equals(transactionList.get(row).getPeriod())) {
+				expensePeriod.setValue(transactionList.get(row).getPeriod());
 				break;
 			}
 		}
 
 		for (int i = 0; i< expenseCategory.getItems().size(); ++i) {
-			if (expenseCategory.getItems().get(i).equals(expenseList.get(row).getCategory())) {
-				expenseCategory.setValue(expenseList.get(row).getCategory());
+			if (expenseCategory.getItems().get(i).equals(transactionList.get(row).getCategory())) {
+				expenseCategory.setValue(transactionList.get(row).getCategory());
 				break;
 			}
 		}
 
-		expenseValue.setText(expenseList.get(row).getValue());
-		expenseList.remove(row);
+		expenseValue.setText(transactionList.get(row).getValue());
+		transactionList.remove(row);
 	}
 
 	@FXML
@@ -240,7 +246,7 @@ public class ExpCalc extends Application {
 
 	@FXML
 	public void onNewSheetButton() {
-		expenseList.clear();
+		transactionList.clear();
 		path = getInitialDocumentPath();
 		hasPendingChanges = false;
 	}
@@ -261,9 +267,9 @@ public class ExpCalc extends Application {
 	 * Builds the "Category"-cobobox
 	 */
 	public void setUpCategoryComboBox() {
-        for (int i = 0; i< expenseList.size(); ++i) {
-        	if (expenseCategory.getItems().contains(expenseList.get(i).getCategory()) == false) {
-        		expenseCategory.getItems().add(expenseList.get(i).getCategory());
+        for (int i = 0; i< transactionList.size(); ++i) {
+        	if (expenseCategory.getItems().contains(transactionList.get(i).getCategory()) == false) {
+        		expenseCategory.getItems().add(transactionList.get(i).getCategory());
         	}
         }
         expenseCategory.getSelectionModel().selectFirst();
@@ -284,17 +290,15 @@ public class ExpCalc extends Application {
 			stage.setY(event.getScreenY() - yOffset - 37);
 		});
 
-		expenseList.addListener(new ListListener());
+		transactionList.addListener(new ListListener());
 	}
 
 	/**
-	 * Adds an "Expense" to the list.
+	 * Adds an "Transaction" to the list.
 	 */
 	public void addExpense() {
 		//Checks if the "Category"-combobox already has the String from the "Category-Textfield". If not, it will be added to the combobox.
 		if (addCategoryTextField.getText() != null && !addCategoryTextField.getText().isEmpty()) {
-			boolean contained = false;
-
 			if (!expenseCategory.getItems().contains(addCategoryTextField.getText())) {
 				expenseCategory.getItems().add(addCategoryTextField.getText());
 			}
@@ -305,7 +309,7 @@ public class ExpCalc extends Application {
 		double expValue = 0d;
 		try {
 			expValue = Double.parseDouble(expenseValue.getText());
-			if (isIncome.isSelected()) {
+			if (!isIncome.isSelected()) {
 				expValue -= expValue * 2;
 			}
 		} catch (Exception e) {
@@ -313,22 +317,22 @@ public class ExpCalc extends Application {
 			return;
 		}
 		
-		//Check the fields and create a new "Expense".
-		Expense exp = null;
+		//Check the fields and create a new "Transaction".
+		Transaction exp = null;
 
 		if (!expenseTitle.getText().isEmpty() && !expenseValue.getText().isEmpty()) {
 			if (addCategoryTextField.getText() != null && !addCategoryTextField.getText().isEmpty()) {
-				exp = new Expense(expenseTitle.getText(), String.valueOf(expValue), expensePeriod.getValue(), addCategoryTextField.getText());
+				exp = new Transaction(expenseTitle.getText(), String.valueOf(expValue), expensePeriod.getValue(), addCategoryTextField.getText());
 
 			} else if (expenseCategory.getValue().equals("[Add a category...]")) {
 				expenseCategory.getSelectionModel().selectFirst();
-				exp = new Expense(expenseTitle.getText(), String.valueOf(expValue), expensePeriod.getValue(), expenseCategory.getValue());
+				exp = new Transaction(expenseTitle.getText(), String.valueOf(expValue), expensePeriod.getValue(), expenseCategory.getValue());
 
 			} else {
-				exp = new Expense(expenseTitle.getText(), String.valueOf(expValue), expensePeriod.getValue(), expenseCategory.getValue());
+				exp = new Transaction(expenseTitle.getText(), String.valueOf(expValue), expensePeriod.getValue(), expenseCategory.getValue());
 
 			}
-			expenseList.add(exp);
+			transactionList.add(exp);
 			hasPendingChanges = true;
 		} else {
 			errorMessage.showErrorMessage("Some fields aren't filled correctly!");
@@ -351,11 +355,11 @@ public class ExpCalc extends Application {
 	 */
 	boolean deleteSelectedRow() {
 		try {
-		    TableView.TableViewSelectionModel<Expense> selectionModel = expensesTableView.getSelectionModel();
+		    TableView.TableViewSelectionModel<Transaction> selectionModel = expensesTableView.getSelectionModel();
 		    ObservableList selectedCells = selectionModel.getSelectedCells();
 		    TablePosition tablePosition = (TablePosition) selectedCells.get(0);
 		    int row = tablePosition.getRow();
-		    expenseList.remove(row);
+		    transactionList.remove(row);
 			return true;
 		} catch(Exception e) {}
 	    return false;
@@ -366,7 +370,7 @@ public class ExpCalc extends Application {
 	 */
 	public void calculateValues() {
 		Double sum = new Double(0);
-		for (Expense e : expenseList) {
+		for (Transaction e : transactionList) {
 			if (e.getPeriod().equals("Year")) {
 				sum += Double.parseDouble(e.getValue());
 			} else if (e.getPeriod().equals("6 Months")) {
@@ -389,6 +393,7 @@ public class ExpCalc extends Application {
 		DecimalFormat  weekFormat = new DecimalFormat("#.##");
 		DecimalFormat  monthFormat = new DecimalFormat("#");
 		DecimalFormat  yearFormat = new DecimalFormat("#");
+		setStyleClassForNegativeOrPositiveValue(Arrays.asList(expensesPerHourText, expensesPerDayText, expensesPerWeekText, expensesPerMonthText, expensesPerYearText), sum);
 		expensesPerHourText.setText(hourFormat.format(sum / 8760).toString());
 		expensesPerDayText.setText(dayFormat.format(sum / 365).toString());
 		expensesPerWeekText.setText(weekFormat.format(sum / 52).toString());
@@ -396,13 +401,25 @@ public class ExpCalc extends Application {
 		expensesPerYearText.setText(yearFormat.format(sum).toString());
 	}
 
+	private void setStyleClassForNegativeOrPositiveValue(List<Label> labels, Double sum) {
+		for (Label label : labels) {
+			if (sum < 0) {
+				label.getStyleClass().remove("positive-value");
+				label.getStyleClass().add("negative-value");
+			} else {
+				label.getStyleClass().remove("negative-value");
+				label.getStyleClass().add("positive-value");
+			}
+		}
+	}
+
 	/**
 	 * Loads a file by from the path parameter. If the file isn't conform, an errormessage will be displayed.
 	 */
 	public void loadFile(String path) {
-		final List<Expense> loadedExpenses = fileService.loadFile(path.toString());
-		expenseList.clear();
-		expenseList.addAll(loadedExpenses);
+		final List<Transaction> loadedEntities = fileService.loadFile(path.toString());
+		transactionList.clear();
+		transactionList.addAll(loadedEntities);
 		calculateValues();
 		setUpCategoryComboBox();
 		hasPendingChanges = false;
@@ -446,10 +463,10 @@ public class ExpCalc extends Application {
 	/**
 	 * If the list changes its values (loading, adding, deleting, editing,... Expenses), the table refreshes.
 	 */
-	public class ListListener implements ListChangeListener<Expense> {
+	public class ListListener implements ListChangeListener<Transaction> {
 
 		@Override
-		public void onChanged(Change<? extends Expense> arg0) {
+		public void onChanged(Change<? extends Transaction> arg0) {
 			calculateValues();
 			errorMessage.clear();
 		}

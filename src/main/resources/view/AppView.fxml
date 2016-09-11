@@ -13,9 +13,10 @@
 <?import javafx.collections.FXCollections?>
 <?import javafx.scene.layout.GridPane?>
 <?import java.lang.Integer?>
-<?import model.MessageToast?>
+<?import controller.MessageToast?>
 
 <?import javafx.scene.control.CheckBox?>
+<?import controller.HighlightIncomeCellFactory?>
 <GridPane xmlns:fx="http://javafx.com/fxml">
     <fx:define>
         <Integer fx:id="buttonWidth" fx:value="75" />
@@ -61,6 +62,9 @@
                             <cellValueFactory>
                                 <PropertyValueFactory property="value" />
                             </cellValueFactory>
+                            <cellFactory>
+                                <HighlightIncomeCellFactory />
+                            </cellFactory>
                         </TableColumn>
                     </columns>
                 </TableView>
@@ -76,34 +80,34 @@
                         <VBox spacing="5" AnchorPane.topAnchor="0">
                             <children>
                                 <ImageView fx:id="logoImageView" />
-                                <Label text="Expenses per year" styleClass="app-labels" />
+                                <Label text="Gain per year" styleClass="app-labels" />
                                 <Label fx:id="expensesPerYearText" text="0" styleClass="app-values" />
-                                <Label text="Expenses per Month" styleClass="app-labels" />
+                                <Label text="Gain per Month" styleClass="app-labels" />
                                 <Label fx:id="expensesPerMonthText" text="0" styleClass="app-values" />
-                                <Label text="Expenses per Week" styleClass="app-labels" />
+                                <Label text="Gain per Week" styleClass="app-labels" />
                                 <Label fx:id="expensesPerWeekText" text="0" styleClass="app-values" />
-                                <Label text="Expenses per Day" styleClass="app-labels" />
+                                <Label text="Gain per Day" styleClass="app-labels" />
                                 <Label fx:id="expensesPerDayText" text="0" styleClass="app-values" />
-                                <Label text="Expenses per Hour" styleClass="app-labels" />
+                                <Label text="Gain per Hour" styleClass="app-labels" />
                                 <Label fx:id="expensesPerHourText" text="0" styleClass="app-values" />
                             </children>
                         </VBox>
-                        <MessageToast fx:id="errorMessage" />
+                        <MessageToast fx:id="errorMessage" prefWidth="160" />
                     </children>
                 </VBox>
             </children>
         </AnchorPane>
-        <GridPane hgap="20" vgap="5" alignment="CENTER_LEFT" GridPane.columnIndex="1" GridPane.rowIndex="1">
+        <GridPane hgap="20" vgap="5" alignment="CENTER_LEFT" GridPane.columnIndex="1" GridPane.rowIndex="1" GridPane.columnSpan="2">
             <padding>
                 <Insets top="20" right="0" bottom="20" left="0" />
             </padding>
             <children>
                 <!-- column 0 -->
-                <CheckBox fx:id="isIncome" text="Income" GridPane.columnIndex="0" GridPane.rowIndex="0" />
                 <Button text="Add" onAction="#onAddExpense" minWidth="${minWidth}" prefWidth="${buttonWidth}" prefHeight="${buttonHeight}" GridPane.columnIndex="0" GridPane.rowIndex="1" />
+                <!-- column 1 -->
                 <Label text="Title" styleClass="app-labels" GridPane.columnIndex="1" GridPane.rowIndex="0" />
                 <TextField fx:id="expenseTitle" promptText="Title..." prefHeight="${buttonHeight}" GridPane.columnIndex="1" GridPane.rowIndex="1" />
-                <!-- column 1 -->
+                <!-- column 2 -->
                 <Label text="Category" styleClass="app-labels" GridPane.columnIndex="2" GridPane.rowIndex="0" />
                 <ComboBox fx:id="expenseCategory" prefHeight="${buttonHeight}" GridPane.columnIndex="2" GridPane.rowIndex="1">
                     <items>
@@ -114,7 +118,7 @@
                     </items>
                 </ComboBox>
                 <TextField fx:id="addCategoryTextField" promptText="Title of new category..." visible="false" prefHeight="${buttonHeight}" GridPane.columnIndex="2" GridPane.rowIndex="2" />
-                <!-- column 2 -->
+                <!-- column 3 -->
                 <Label text="Period" styleClass="app-labels" GridPane.columnIndex="3" GridPane.rowIndex="0" />
                 <ComboBox fx:id="expensePeriod" prefHeight="${buttonHeight}" GridPane.columnIndex="3" GridPane.rowIndex="1">
                     <items>
@@ -128,10 +132,11 @@
                         </FXCollections>
                     </items>
                 </ComboBox>
-                <CheckBox fx:id="isIncome" text="Income" />
-                <!-- column 3 -->
+                <!-- column 4 -->
                 <Label text="Value" styleClass="app-labels" GridPane.columnIndex="4" GridPane.rowIndex="0" />
                 <TextField fx:id="expenseValue" promptText="Value..."  prefHeight="${buttonHeight}" GridPane.columnIndex="4" GridPane.rowIndex="1" />
+                <!-- column 5 -->
+                <CheckBox fx:id="isIncome" text="Income" GridPane.columnIndex="5" GridPane.rowIndex="1" />
             </children>
         </GridPane>
     </children>
