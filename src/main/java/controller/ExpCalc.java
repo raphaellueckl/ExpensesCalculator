@@ -5,6 +5,7 @@ import javafx.application.Application;
 import javafx.collections.FXCollections;
 import javafx.collections.ListChangeListener;
 import javafx.collections.ObservableList;
+import javafx.collections.transformation.SortedList;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
@@ -133,11 +134,8 @@ public class ExpCalc extends Application {
 
 		expensePeriod.getSelectionModel().selectFirst();
 
-		expensesTableView.setItems(transactionList);
-
-		expensesTableView.setSortPolicy(
+		expensesTableView.sortPolicyProperty().set(
 				new Callback<TableView<Transaction>, Boolean>() {
-
 					@Override
 					public Boolean call(TableView<Transaction> param) {
 						Comparator<Transaction> c = (a, b) -> {
@@ -148,10 +146,26 @@ public class ExpCalc extends Application {
 						};
 						FXCollections.sort(expensesTableView.getItems(), c);
 						return true;
-					}
+					};
 				}
-
 		);
+
+		expensesTableView.setItems(transactionList);
+
+//		SortedList<Transaction> sl = new SortedList<>(transactionList);
+//		sl.setComparator((a,b) -> {
+//			if (a.getValue().contains("-") ^ b.getValue().contains("-")) {
+//				return a.getValue().contains("-") ? 1 : -1;
+//			}
+//			return 0;
+//		});
+//
+//		sl.comparatorProperty().bind(expensesTableView.comparatorProperty());
+//
+//		expensesTableView.setItems(sl);
+
+
+
 
 
 		setUpCategoryComboBox();
