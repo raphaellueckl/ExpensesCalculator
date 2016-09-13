@@ -14,11 +14,15 @@ public class HighlightIncomeCellFactory implements Callback<TableColumn<Transact
             public void updateItem(String item, boolean empty) {
                 super.updateItem(item, empty);
                 if (item != null && item.contains("-")) {
-                    getTableRow().setStyle("-fx-background-color: rgb(102, 51, 0)");
+//                    getTableRow().setStyle("-fx-background-color: rgb(102, 51, 0)");
+                    getTableRow().getStyleClass().add("incomeRow");
 //                    getTableRow().getStyleClass().add("positive-value");
 //                    getStyleClass().add("positive-value");
+                    setText(item);
+                } else {
+                    getTableRow().getStyleClass().remove("incomeRow");
+                    setText(item);
                 }
-                setText(item);
             }
         };
     }

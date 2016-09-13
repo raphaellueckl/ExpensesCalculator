@@ -62,9 +62,9 @@
                             <cellValueFactory>
                                 <PropertyValueFactory property="value" />
                             </cellValueFactory>
-                            <cellFactory>
+                            <!--<cellFactory>
                                 <HighlightIncomeCellFactory />
-                            </cellFactory>
+                            </cellFactory>-->
                         </TableColumn>
                     </columns>
                 </TableView>

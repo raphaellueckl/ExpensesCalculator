@@ -66,12 +66,14 @@
 }
 
 .positive-value {
-    /*-fx-text-fill: #00BBFF;*/
-    /*-fx-background-color: #FF0000;*/
     rgb(255, 255, 255);
 }
 
 /* TableView style */
+.incomeRow {
+    -fx-background-color: rgb(102, 51, 0)
+}
+
 .table-view {
     /*-fx-background-color: transparent;*/
     -fx-background-color: rgba(153, 102, 51, 0.7);

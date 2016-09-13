@@ -18,6 +18,7 @@ import javafx.scene.layout.GridPane;
 import javafx.stage.FileChooser;
 import javafx.stage.FileChooser.ExtensionFilter;
 import javafx.stage.Stage;
+import javafx.util.Callback;
 import model.Transaction;
 
 import java.io.*;
@@ -135,12 +136,21 @@ public class ExpCalc extends Application {
 		expensesTableView.setItems(transactionList);
 
 		expensesTableView.setSortPolicy(
-			Comparator<Transaction> comparator = (a, b) -> {
-				if (a.getValue().contains("-") ^ b.getValue().contains("-")) {
-					return a.getValue().contains("-") ? 1 : -1;
+				new Callback<TableView<Transaction>, Boolean>() {
+
+					@Override
+					public Boolean call(TableView<Transaction> param) {
+						Comparator<Transaction> c = (a, b) -> {
+							if (a.getValue().contains("-") ^ b.getValue().contains("-")) {
+								return a.getValue().contains("-") ? 1 : -1;
+							}
+							return 0;
+						};
+						FXCollections.sort(expensesTableView.getItems(), c);
+						return true;
+					}
 				}
-				return 0;
-			}
+
 		);
 
 
@@ -156,6 +166,21 @@ public class ExpCalc extends Application {
 		scene.setOnDragDropped(new FileDragHandler());
         scene.getStylesheets().add(ExpCalc.class.getResource("/stylesheet.css").toExternalForm());
 		expenseTitle.requestFocus();
+
+		expensesTableView.setRowFactory(new Callback<TableView<Transaction>, TableRow<Transaction>>() {
+			@Override public TableRow<Transaction> call(TableView<Transaction> param) {
+				return new TableRow<Transaction>() {
+					@Override protected void updateItem(Transaction item, boolean empty) {
+						super.updateItem(item, empty);
+						if (item != null && item.getValue().contains("-")) {
+							getStyleClass().add("incomeRow");
+						} else {
+							getStyleClass().remove("incomeRow");
+						}
+					}
+				};
+			}
+		});
 
 		stage.setTitle("Nubage - Expenses Calculator");
 		stage.getIcons().add(new Image(getClass().getResourceAsStream("/nubage_favicon.png")));
