@@ -386,6 +386,8 @@ public class ExpCalc extends Application {
 		expenseValue.setText(null);
 		expenseTitle.requestFocus();
 
+		expensesTableView.sort();
+
 		hasPendingChanges = true;
 	}
 
