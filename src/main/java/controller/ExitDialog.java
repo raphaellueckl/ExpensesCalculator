@@ -13,7 +13,7 @@ import java.io.IOException;
 
 public class ExitDialog extends Stage {
 
-	private final ExpCalc expCalc;
+	private final Calculator expCalc;
 	private double xOffset = 0;
 	private double yOffset = 0;
 
@@ -22,7 +22,7 @@ public class ExitDialog extends Stage {
 	@FXML
 	private Button discardAndCloseButton;
 
-	public ExitDialog(ExpCalc expCalc) {
+	public ExitDialog(Calculator expCalc) {
 		this.expCalc = expCalc;
 		final FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/view/ExitDialogView.fxml"));
 		fxmlLoader.setController(this);
@@ -44,8 +44,8 @@ public class ExitDialog extends Stage {
 		});
 		
 		final Scene exitDialogScene = new Scene(vBox, 440, 200);
-		exitDialogScene.getStylesheets().add(ExpCalc.class.getResource("/stylesheet.css").toExternalForm());
-		exitDialogScene.getStylesheets().add(ExpCalc.class.getResource("/stylesheet_exitdialog.css").toExternalForm());
+		exitDialogScene.getStylesheets().add(Calculator.class.getResource("/stylesheet.css").toExternalForm());
+		exitDialogScene.getStylesheets().add(Calculator.class.getResource("/stylesheet_exitdialog.css").toExternalForm());
 		this.initModality(Modality.APPLICATION_MODAL);
 		this.getIcons().add(new Image(getClass().getResourceAsStream("/nubage_favicon.png")));
 		this.setScene(exitDialogScene);

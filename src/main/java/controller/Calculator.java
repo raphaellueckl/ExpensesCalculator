@@ -1,11 +1,9 @@
 package controller;
 
-import com.sun.rowset.internal.Row;
 import javafx.application.Application;
 import javafx.collections.FXCollections;
 import javafx.collections.ListChangeListener;
 import javafx.collections.ObservableList;
-import javafx.collections.transformation.SortedList;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
@@ -25,14 +23,13 @@ import model.Transaction;
 import java.io.*;
 import java.text.DecimalFormat;
 import java.util.Arrays;
-import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
 
 /**
  * TODO:
- * - Make negative expenses: Possibility to declare income
- * - Toast messages
+ * - Exit Dialog: Don't close, if user presses [x]
+ * - Translation from resource bundle
  * 
  * History:
  * V1.0:
@@ -85,10 +82,12 @@ import java.util.List;
  *
  * V2.2.0
  * - New Feature: You can now add incomes, not just expenses.
+ * - Updated logo
  * - Optimized the window-drag-movement for Windows 10.
+ * - Code improvements & bug fixes.
  */
 
-public class ExpCalc extends Application {
+public class Calculator extends Application {
 
 	private FileService fileService;
 	private File path = getInitialDocumentPath();
@@ -132,23 +131,10 @@ public class ExpCalc extends Application {
 		fileService = new FileService(errorMessage);
 
 		transactionList = FXCollections.observableArrayList();
-
 		expensePeriod.getSelectionModel().selectFirst();
 
-		expensesTableView.sortPolicyProperty().set(cb -> {
-			Comparator<Transaction> c = (a, b) -> {
-				if (a.getValue().contains("-") ^ b.getValue().contains("-")) {
-					return a.getValue().contains("-") ? 1 : -1;
-				}
-				return 0;
-			};
-			FXCollections.sort(expensesTableView.getItems(), c);
-			return true;
-		});
-
-		expensesTableView.setItems(transactionList);
-
-		setUpCategoryComboBox();
+		setupTableView(transactionList);
+		setupCategoryComboBox();
 		buildListeners(stage);
 
 		//Adding the logo...
@@ -158,42 +144,8 @@ public class ExpCalc extends Application {
 		scene.setOnKeyReleased(new KeyHandler());
 		scene.setOnDragOver(new DragOverHandler());
 		scene.setOnDragDropped(new FileDragHandler());
-        scene.getStylesheets().add(ExpCalc.class.getResource("/stylesheet.css").toExternalForm());
+        scene.getStylesheets().add(Calculator.class.getResource("/stylesheet.css").toExternalForm());
 		expenseTitle.requestFocus();
-
-//		expensesTableView.setRowFactory(new Callback<TableView<Transaction>, TableRow<Transaction>>() {
-//			@Override public TableRow<Transaction> call(TableView<Transaction> param) {
-//				return new TableRow<Transaction>() {
-//					@Override protected void updateItem(Transaction item, boolean empty) {
-//						super.updateItem(item, empty);
-//						if (item != null && item.getValue().contains("-")) {
-//							getStyleClass().add("income-row");
-//						} else {
-//							getStyleClass().remove("income-row");
-//						}
-//					}
-//				};
-//			}
-//		});
-
-        expensesTableView.setRowFactory(new Callback<TableView<Transaction>, TableRow<Transaction>>() {
-            @Override
-            public TableRow<Transaction> call(TableView<Transaction> tableView) {
-                return new TableRow<Transaction>() {
-                    @Override
-                    protected void updateItem(Transaction person, boolean empty){
-                        super.updateItem(person, empty);
-                        if (person == null || !person.getValue().contains("-")) {
-							getStyleClass().remove("income-row");
-//							setStyle("-fx-background-color: red;");
-						} else {
-//							setStyle("-fx-background-color: transparent;");
-							getStyleClass().add("income-row");
-                        }
-                    }
-                };
-            }
-        });
 
 		stage.setTitle("Nubage - Expenses Calculator");
 		stage.getIcons().add(new Image(getClass().getResourceAsStream("/nubage_favicon.png")));
@@ -205,6 +157,40 @@ public class ExpCalc extends Application {
 			}
 		});
 		stage.show();
+	}
+
+	private void setupTableView(ObservableList<Transaction> transactionList) {
+		expensesTableView.sortPolicyProperty().set(cb -> {
+			Comparator<Transaction> c = (a, b) -> {
+				if (a.getValue().contains("-") ^ b.getValue().contains("-")) {
+					return a.getValue().contains("-") ? 1 : -1;
+				}
+				return 0;
+			};
+			FXCollections.sort(expensesTableView.getItems(), c);
+			return true;
+		});
+
+		expensesTableView.setRowFactory(new Callback<TableView<Transaction>, TableRow<Transaction>>() {
+			@Override
+			public TableRow<Transaction> call(TableView<Transaction> tableView) {
+				return new TableRow<Transaction>() {
+					@Override
+					protected void updateItem(Transaction person, boolean empty){
+						super.updateItem(person, empty);
+						if (person == null || person.getValue().contains("-")) {
+							getStyleClass().remove("income-row");
+						} else if ( !person.getValue().contains("-")) {
+							getStyleClass().add("income-row");
+						} else {
+							getStyleClass().remove("income-row");
+						}
+					}
+				};
+			}
+		});
+
+		expensesTableView.setItems(transactionList);
 	}
 
 	@FXML
@@ -304,7 +290,7 @@ public class ExpCalc extends Application {
 	/**
 	 * Builds the "Category"-cobobox
 	 */
-	public void setUpCategoryComboBox() {
+	public void setupCategoryComboBox() {
         for (int i = 0; i< transactionList.size(); ++i) {
         	if (expenseCategory.getItems().contains(transactionList.get(i).getCategory()) == false) {
         		expenseCategory.getItems().add(transactionList.get(i).getCategory());
@@ -376,13 +362,13 @@ public class ExpCalc extends Application {
 			errorMessage.showErrorMessage("Some fields aren't filled correctly!");
 		}
 
-		addCategoryTextField.setText(null);
+		addCategoryTextField.setText("");
 		addCategoryTextField.setVisible(false);
 
-		expenseTitle.setText(null);
+		expenseTitle.setText("");
 		expenseCategory.getSelectionModel().selectLast();
 		expensePeriod.getSelectionModel().selectFirst();
-		expenseValue.setText(null);
+		expenseValue.setText("");
 		expenseTitle.requestFocus();
 
 		expensesTableView.sort();
@@ -463,12 +449,13 @@ public class ExpCalc extends Application {
 		transactionList.clear();
 		transactionList.addAll(loadedEntities);
 		calculateValues();
-		setUpCategoryComboBox();
+		setupCategoryComboBox();
+		expensesTableView.sort();
 		hasPendingChanges = false;
 	}
 
 	private File getInitialDocumentPath() {
-		return new File(ExpCalc.class.getProtectionDomain().getCodeSource().getLocation().getPath()).getParentFile();
+		return new File(Calculator.class.getProtectionDomain().getCodeSource().getLocation().getPath()).getParentFile();
 	}
 
 	/**
@@ -481,7 +468,7 @@ public class ExpCalc extends Application {
 			if (expenseCategory.getValue().equals("[Add a category...]")) {
 		        addCategoryTextField.setVisible(true);
 			} else {
-				addCategoryTextField.setText(null);
+				addCategoryTextField.setText("");
 				addCategoryTextField.setVisible(false);
 			}
 		}

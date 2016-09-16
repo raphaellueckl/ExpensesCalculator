@@ -66,15 +66,10 @@
 }
 
 .positive-value {
-    rgb(255, 255, 255);
+    -fx-text-fill: #00BBFF;
 }
 
 /* TableView style */
-.income-row {
-    /*-fx-background-color: rgb(102, 51, 0)*/
-    -fx-background-color: white;
-}
-
 .table-view {
     /*-fx-background-color: transparent;*/
     -fx-background-color: rgba(153, 102, 51, 0.7);
@@ -147,4 +142,14 @@
 .table-view .scroll-bar:horizontal .increment-button,
 .table-view .scroll-bar:horizontal .decrement-button {
     -fx-padding: 0;
+}
+
+.table-row-cell.income-row,
+.table-row-cell.income-row:odd{
+    -fx-background-color: rgb(102, 51, 0)
+}
+
+.table-row-cell:selected,
+.table-row-cell.income:selected {
+    -fx-background-color: rgb(0, 0, 0)
 }
