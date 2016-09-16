@@ -70,8 +70,9 @@
 }
 
 /* TableView style */
-.incomeRow {
-    -fx-background-color: rgb(102, 51, 0)
+.income-row {
+    /*-fx-background-color: rgb(102, 51, 0)*/
+    -fx-background-color: white;
 }
 
 .table-view {

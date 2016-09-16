@@ -25,6 +25,7 @@ import model.Transaction;
 import java.io.*;
 import java.text.DecimalFormat;
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
 
@@ -160,20 +161,39 @@ public class ExpCalc extends Application {
         scene.getStylesheets().add(ExpCalc.class.getResource("/stylesheet.css").toExternalForm());
 		expenseTitle.requestFocus();
 
-		expensesTableView.setRowFactory(new Callback<TableView<Transaction>, TableRow<Transaction>>() {
-			@Override public TableRow<Transaction> call(TableView<Transaction> param) {
-				return new TableRow<Transaction>() {
-					@Override protected void updateItem(Transaction item, boolean empty) {
-						super.updateItem(item, empty);
-						if (item != null && item.getValue().contains("-")) {
-							getStyleClass().add("incomeRow");
+//		expensesTableView.setRowFactory(new Callback<TableView<Transaction>, TableRow<Transaction>>() {
+//			@Override public TableRow<Transaction> call(TableView<Transaction> param) {
+//				return new TableRow<Transaction>() {
+//					@Override protected void updateItem(Transaction item, boolean empty) {
+//						super.updateItem(item, empty);
+//						if (item != null && item.getValue().contains("-")) {
+//							getStyleClass().add("income-row");
+//						} else {
+//							getStyleClass().remove("income-row");
+//						}
+//					}
+//				};
+//			}
+//		});
+
+        expensesTableView.setRowFactory(new Callback<TableView<Transaction>, TableRow<Transaction>>() {
+            @Override
+            public TableRow<Transaction> call(TableView<Transaction> tableView) {
+                return new TableRow<Transaction>() {
+                    @Override
+                    protected void updateItem(Transaction person, boolean empty){
+                        super.updateItem(person, empty);
+                        if (person == null || !person.getValue().contains("-")) {
+							getStyleClass().remove("income-row");
+//							setStyle("-fx-background-color: red;");
 						} else {
-							getStyleClass().remove("incomeRow");
-						}
-					}
-				};
-			}
-		});
+//							setStyle("-fx-background-color: transparent;");
+							getStyleClass().add("income-row");
+                        }
+                    }
+                };
+            }
+        });
 
 		stage.setTitle("Nubage - Expenses Calculator");
 		stage.getIcons().add(new Image(getClass().getResourceAsStream("/nubage_favicon.png")));
