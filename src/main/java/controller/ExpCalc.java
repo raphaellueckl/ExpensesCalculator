@@ -134,39 +134,18 @@ public class ExpCalc extends Application {
 
 		expensePeriod.getSelectionModel().selectFirst();
 
-		expensesTableView.sortPolicyProperty().set(
-				new Callback<TableView<Transaction>, Boolean>() {
-					@Override
-					public Boolean call(TableView<Transaction> param) {
-						Comparator<Transaction> c = (a, b) -> {
-							if (a.getValue().contains("-") ^ b.getValue().contains("-")) {
-								return a.getValue().contains("-") ? 1 : -1;
-							}
-							return 0;
-						};
-						FXCollections.sort(expensesTableView.getItems(), c);
-						return true;
-					};
+		expensesTableView.sortPolicyProperty().set(cb -> {
+			Comparator<Transaction> c = (a, b) -> {
+				if (a.getValue().contains("-") ^ b.getValue().contains("-")) {
+					return a.getValue().contains("-") ? 1 : -1;
 				}
-		);
+				return 0;
+			};
+			FXCollections.sort(expensesTableView.getItems(), c);
+			return true;
+		});
 
 		expensesTableView.setItems(transactionList);
-
-//		SortedList<Transaction> sl = new SortedList<>(transactionList);
-//		sl.setComparator((a,b) -> {
-//			if (a.getValue().contains("-") ^ b.getValue().contains("-")) {
-//				return a.getValue().contains("-") ? 1 : -1;
-//			}
-//			return 0;
-//		});
-//
-//		sl.comparatorProperty().bind(expensesTableView.comparatorProperty());
-//
-//		expensesTableView.setItems(sl);
-
-
-
-
 
 		setUpCategoryComboBox();
 		buildListeners(stage);
@@ -434,7 +413,9 @@ public class ExpCalc extends Application {
 		DecimalFormat  weekFormat = new DecimalFormat("#.##");
 		DecimalFormat  monthFormat = new DecimalFormat("#");
 		DecimalFormat  yearFormat = new DecimalFormat("#");
+
 		setStyleClassForNegativeOrPositiveValue(Arrays.asList(expensesPerHourText, expensesPerDayText, expensesPerWeekText, expensesPerMonthText, expensesPerYearText), sum);
+
 		expensesPerHourText.setText(hourFormat.format(sum / 8760).toString());
 		expensesPerDayText.setText(dayFormat.format(sum / 365).toString());
 		expensesPerWeekText.setText(weekFormat.format(sum / 52).toString());
