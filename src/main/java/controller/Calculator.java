@@ -22,9 +22,7 @@ import model.Transaction;
 
 import java.io.*;
 import java.text.DecimalFormat;
-import java.util.Arrays;
-import java.util.Comparator;
-import java.util.List;
+import java.util.*;
 
 /**
  * TODO:
@@ -121,6 +119,8 @@ public class Calculator extends Application {
 	public void start(Stage stage) {
 		final FXMLLoader loader = new FXMLLoader();
 		loader.setController(this);
+//		ResourceBundle.getBundle("bundles/language_en", new Locale("en", "EN"));
+		loader.setResources(ResourceBundle.getBundle("bundles/language_en", new Locale("en", "EN")));
 		loader.setLocation(getClass().getResource("/view/AppView.fxml"));
 		try {
 			mainView = (GridPane) loader.load();

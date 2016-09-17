@@ -43,7 +43,12 @@
             <children>
                 <TableView fx:id="expensesTableView" editable="true" VBox.vgrow="ALWAYS">
                     <columns>
-                        <TableColumn text="Title" prefWidth="${expensesTableView.width*0.35}">
+                        <!--<TableColumn text="Title" prefWidth="${expensesTableView.width*0.35}">
+                            <cellValueFactory>
+                                <PropertyValueFactory property="title" />
+                            </cellValueFactory>
+                        </TableColumn>-->
+                        <TableColumn text="%title" prefWidth="${expensesTableView.width*0.35}">
                             <cellValueFactory>
                                 <PropertyValueFactory property="title" />
                             </cellValueFactory>
@@ -62,9 +67,6 @@
                             <cellValueFactory>
                                 <PropertyValueFactory property="value" />
                             </cellValueFactory>
-                            <!--<cellFactory>
-                                <HighlightIncomeCellFactory />
-                            </cellFactory>-->
                         </TableColumn>
                     </columns>
                 </TableView>
