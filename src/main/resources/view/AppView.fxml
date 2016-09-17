@@ -16,7 +16,7 @@
 <?import controller.MessageToast?>
 
 <?import javafx.scene.control.CheckBox?>
-<?import controller.HighlightIncomeCellFactory?>
+
 <GridPane xmlns:fx="http://javafx.com/fxml">
     <fx:define>
         <Integer fx:id="buttonWidth" fx:value="75" />
@@ -29,11 +29,11 @@
                 <Insets top="20" right="20" bottom="20" left="20" />
             </padding>
             <children>
-                <Button text="Save" onAction="#onSaveButton" minWidth="${minWidth}" prefWidth="${buttonWidth}" prefHeight="${buttonHeight}" />
-                <Button text="Load" onAction="#onLoadButton" minWidth="${minWidth}" prefWidth="${buttonWidth}" prefHeight="${buttonHeight}" />
-                <Button text="Edit" onAction="#onEditButton" minWidth="${minWidth}" prefWidth="${buttonWidth}" prefHeight="${buttonHeight}" />
-                <Button text="Delete" onAction="#onDeleteButton" minWidth="${minWidth}" prefWidth="${buttonWidth}" prefHeight="${buttonHeight}" />
-                <Button text="New" onAction="#onNewSheetButton" minWidth="${minWidth}" prefWidth="${buttonWidth}" prefHeight="${buttonHeight}" />
+                <Button text="%button.save" onAction="#onSaveButton" minWidth="${minWidth}" prefWidth="${buttonWidth}" prefHeight="${buttonHeight}" />
+                <Button text="%button.load" onAction="#onLoadButton" minWidth="${minWidth}" prefWidth="${buttonWidth}" prefHeight="${buttonHeight}" />
+                <Button text="%button.edit" onAction="#onEditButton" minWidth="${minWidth}" prefWidth="${buttonWidth}" prefHeight="${buttonHeight}" />
+                <Button text="%button.delete" onAction="#onDeleteButton" minWidth="${minWidth}" prefWidth="${buttonWidth}" prefHeight="${buttonHeight}" />
+                <Button text="%button.new" onAction="#onNewSheetButton" minWidth="${minWidth}" prefWidth="${buttonWidth}" prefHeight="${buttonHeight}" />
             </children>
         </VBox>
         <VBox GridPane.columnIndex="1" GridPane.rowIndex="0" GridPane.hgrow="ALWAYS" GridPane.vgrow="ALWAYS">
@@ -43,27 +43,22 @@
             <children>
                 <TableView fx:id="expensesTableView" editable="true" VBox.vgrow="ALWAYS">
                     <columns>
-                        <!--<TableColumn text="Title" prefWidth="${expensesTableView.width*0.35}">
-                            <cellValueFactory>
-                                <PropertyValueFactory property="title" />
-                            </cellValueFactory>
-                        </TableColumn>-->
-                        <TableColumn text="%title" prefWidth="${expensesTableView.width*0.35}">
+                        <TableColumn text="%table.title" prefWidth="${expensesTableView.width*0.35}">
                             <cellValueFactory>
                                 <PropertyValueFactory property="title" />
                             </cellValueFactory>
                         </TableColumn>
-                        <TableColumn text="Category" prefWidth="${expensesTableView.width*0.25}">
+                        <TableColumn text="%table.category" prefWidth="${expensesTableView.width*0.25}">
                             <cellValueFactory>
                                 <PropertyValueFactory property="category" />
                             </cellValueFactory>
                         </TableColumn>
-                        <TableColumn text="Period" prefWidth="${expensesTableView.width*0.25}">
+                        <TableColumn text="%table.period" prefWidth="${expensesTableView.width*0.25}">
                             <cellValueFactory>
                                 <PropertyValueFactory property="period" />
                             </cellValueFactory>
                         </TableColumn>
-                        <TableColumn text="Value" prefWidth="${expensesTableView.width*0.15}">
+                        <TableColumn text="%table.value" prefWidth="${expensesTableView.width*0.15}">
                             <cellValueFactory>
                                 <PropertyValueFactory property="value" />
                             </cellValueFactory>
@@ -105,12 +100,12 @@
             </padding>
             <children>
                 <!-- column 0 -->
-                <Button text="Add" onAction="#onAddExpense" minWidth="${minWidth}" prefWidth="${buttonWidth}" prefHeight="${buttonHeight}" GridPane.columnIndex="0" GridPane.rowIndex="1" />
+                <Button text="%button.add" onAction="#onAddExpense" minWidth="${minWidth}" prefWidth="${buttonWidth}" prefHeight="${buttonHeight}" GridPane.columnIndex="0" GridPane.rowIndex="1" />
                 <!-- column 1 -->
-                <Label text="Title" styleClass="app-labels" GridPane.columnIndex="1" GridPane.rowIndex="0" />
-                <TextField fx:id="expenseTitle" promptText="Title..." prefHeight="${buttonHeight}" GridPane.columnIndex="1" GridPane.rowIndex="1" />
+                <Label text="%table.title" styleClass="app-labels" GridPane.columnIndex="1" GridPane.rowIndex="0" />
+                <TextField fx:id="expenseTitle" promptText="%textfield.title" prefHeight="${buttonHeight}" GridPane.columnIndex="1" GridPane.rowIndex="1" />
                 <!-- column 2 -->
-                <Label text="Category" styleClass="app-labels" GridPane.columnIndex="2" GridPane.rowIndex="0" />
+                <Label text="%table.category" styleClass="app-labels" GridPane.columnIndex="2" GridPane.rowIndex="0" />
                 <ComboBox fx:id="expenseCategory" prefHeight="${buttonHeight}" GridPane.columnIndex="2" GridPane.rowIndex="1">
                     <items>
                         <FXCollections fx:factory="observableArrayList">
@@ -119,26 +114,26 @@
                         </FXCollections>
                     </items>
                 </ComboBox>
-                <TextField fx:id="addCategoryTextField" promptText="Title of new category..." visible="false" prefHeight="${buttonHeight}" GridPane.columnIndex="2" GridPane.rowIndex="2" />
+                <TextField fx:id="addCategoryTextField" promptText="%textfield.new_category_title" visible="false" prefHeight="${buttonHeight}" GridPane.columnIndex="2" GridPane.rowIndex="2" />
                 <!-- column 3 -->
-                <Label text="Period" styleClass="app-labels" GridPane.columnIndex="3" GridPane.rowIndex="0" />
+                <Label text="%table.period" styleClass="app-labels" GridPane.columnIndex="3" GridPane.rowIndex="0" />
                 <ComboBox fx:id="expensePeriod" prefHeight="${buttonHeight}" GridPane.columnIndex="3" GridPane.rowIndex="1">
                     <items>
                         <FXCollections fx:factory="observableArrayList">
-                            <String fx:value="Year" />
-                            <String fx:value="6 Months" />
-                            <String fx:value="Quarter" />
-                            <String fx:value="Month" />
-                            <String fx:value="Week" />
-                            <String fx:value="Day" />
+                            <String fx:value="%combobox.year" />
+                            <String fx:value="%combobox.six_months" />
+                            <String fx:value="%combobox.quarter" />
+                            <String fx:value="%combobox.month" />
+                            <String fx:value="%combobox.week" />
+                            <String fx:value="%combobox.day" />
                         </FXCollections>
                     </items>
                 </ComboBox>
                 <!-- column 4 -->
-                <Label text="Value" styleClass="app-labels" GridPane.columnIndex="4" GridPane.rowIndex="0" />
-                <TextField fx:id="expenseValue" promptText="Value..."  prefHeight="${buttonHeight}" GridPane.columnIndex="4" GridPane.rowIndex="1" />
+                <Label text="%table.value" styleClass="app-labels" GridPane.columnIndex="4" GridPane.rowIndex="0" />
+                <TextField fx:id="expenseValue" promptText="%textfield.value"  prefHeight="${buttonHeight}" GridPane.columnIndex="4" GridPane.rowIndex="1" />
                 <!-- column 5 -->
-                <CheckBox fx:id="isIncome" text="Income" GridPane.columnIndex="5" GridPane.rowIndex="1" />
+                <CheckBox fx:id="isIncome" text="%checkbox.income" GridPane.columnIndex="5" GridPane.rowIndex="1" />
             </children>
         </GridPane>
     </children>
