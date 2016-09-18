@@ -33,7 +33,7 @@ public class FileService {
         } catch (Exception e) {
             e.printStackTrace();
             if (path != null) {
-                errorMessage.showErrorMessage("Random\nError!");
+                errorMessage.showErrorMessage("Random Error!");
             }
             return false;
         }
@@ -72,13 +72,13 @@ public class FileService {
                 errorMessage.clear();
                 return loadedEntities;
             } else {
-                errorMessage.showErrorMessage("Invalid\nFile!");
+                errorMessage.showErrorMessage("Invalid File!");
             }
         } catch (Exception e) {
             if (path.endsWith(".json"))
-                errorMessage.showErrorMessage("JSON file\ncorrupted!");
+                errorMessage.showErrorMessage("JSON file corrupted!");
             else if (path != null)
-                errorMessage.showErrorMessage("Invalid\nFile!");
+                errorMessage.showErrorMessage("Invalid File!");
         }
         return null;
     }

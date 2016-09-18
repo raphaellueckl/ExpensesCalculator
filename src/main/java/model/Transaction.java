@@ -19,14 +19,8 @@ public class Transaction {
 		this.category = new SimpleStringProperty(category);
 	}
 
-	public String getTitle() { return this.title.get(); }
 
-	public String getCategory() { return this.category.get(); }
-
-	public String getPeriod() { return this.period.get(); }
-
-	public String getValue() { return this.value.get(); }
-
+	//Property methods are needed for FXML.
 	public StringProperty titleProperty() { return this.title; }
 
 	public StringProperty categoryProperty() { return this.category; }
@@ -35,7 +29,7 @@ public class Transaction {
 
 	public StringProperty valueProperty() { return this.value; }
 
-	//Setters are needed for JSON-handling.
+	//Getters and Setters are needed for JSON-handling.
 	public void setTitle(String title) { this.title.set(title); }
 
 	public void setCategory(String category) { this.category.set(category); }
@@ -43,5 +37,13 @@ public class Transaction {
 	public void setPeriod(String period) { this.period.set(period); }
 
 	public void setValue(String value) { this.value.set(value); }
+
+	public String getTitle() { return this.title.get(); }
+
+	public String getCategory() { return this.category.get(); }
+
+	public String getPeriod() { return this.period.get(); }
+
+	public String getValue() { return this.value.get(); }
 
 }

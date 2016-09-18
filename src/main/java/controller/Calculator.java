@@ -84,13 +84,13 @@ import java.util.*;
  * - Optimized the window-drag-movement for Windows 10.
  * - Code improvements & bug fixes.
  */
-
 public class Calculator extends Application {
 
 	private FileService fileService;
 	private File path = getInitialDocumentPath();
 	private GridPane mainView;
 	private ObservableList<Transaction> transactionList;
+	private ResourceBundle currentResourceBundle;
 
 	private boolean hasPendingChanges = false;
 
@@ -117,10 +117,10 @@ public class Calculator extends Application {
 	 */
 	@Override
 	public void start(Stage stage) {
+		currentResourceBundle = ResourceBundle.getBundle("bundles/language_en", new Locale("en", "EN"));
 		final FXMLLoader loader = new FXMLLoader();
 		loader.setController(this);
-//		ResourceBundle.getBundle("bundles/language_en", new Locale("en", "EN"));
-		loader.setResources(ResourceBundle.getBundle("bundles/language_en", new Locale("en", "EN")));
+		loader.setResources(currentResourceBundle);
 		loader.setLocation(getClass().getResource("/view/AppView.fxml"));
 		try {
 			mainView = (GridPane) loader.load();
@@ -135,6 +135,7 @@ public class Calculator extends Application {
 
 		setupTableView(transactionList);
 		setupCategoryComboBox();
+		setupPeriodComboBox();
 		buildListeners(stage);
 
 		//Adding the logo...
@@ -291,6 +292,7 @@ public class Calculator extends Application {
 	 * Builds the "Category"-cobobox
 	 */
 	public void setupCategoryComboBox() {
+		expenseCategory.getItems().addAll(currentResourceBundle.getString("combobox.none"), currentResourceBundle.getString("combobox.add_a_category"));
         for (int i = 0; i< transactionList.size(); ++i) {
         	if (expenseCategory.getItems().contains(transactionList.get(i).getCategory()) == false) {
         		expenseCategory.getItems().add(transactionList.get(i).getCategory());
@@ -298,6 +300,20 @@ public class Calculator extends Application {
         }
         expenseCategory.getSelectionModel().selectFirst();
         expenseCategory.setOnAction(new CategoryListener());
+	}
+
+	/**
+	 * Builds the "Period"-cobobox
+	 */
+	public void setupPeriodComboBox() {
+		expensePeriod.getItems().addAll(
+			currentResourceBundle.getString("combobox.year"),
+			currentResourceBundle.getString("combobox.six_months"),
+			currentResourceBundle.getString("combobox.quarter"),
+			currentResourceBundle.getString("combobox.month"),
+			currentResourceBundle.getString("combobox.week"),
+			currentResourceBundle.getString("combobox.day"));
+		expensePeriod.getSelectionModel().selectFirst();
 	}
 
 	/**
@@ -348,7 +364,7 @@ public class Calculator extends Application {
 			if (addCategoryTextField.getText() != null && !addCategoryTextField.getText().isEmpty()) {
 				exp = new Transaction(expenseTitle.getText(), String.valueOf(expValue), expensePeriod.getValue(), addCategoryTextField.getText());
 
-			} else if (expenseCategory.getValue().equals("[Add a category...]")) {
+			} else if (expenseCategory.getValue().equals(currentResourceBundle.getString("combobox.add_a_category"))) {
 				expenseCategory.getSelectionModel().selectFirst();
 				exp = new Transaction(expenseTitle.getText(), String.valueOf(expValue), expensePeriod.getValue(), expenseCategory.getValue());
 
@@ -465,7 +481,7 @@ public class Calculator extends Application {
 
 		@Override
 		public void handle(ActionEvent arg0) {
-			if (expenseCategory.getValue().equals("[Add a category...]")) {
+			if (expenseCategory.getValue().equals(currentResourceBundle.getString("combobox.add_a_category"))) {
 		        addCategoryTextField.setVisible(true);
 			} else {
 				addCategoryTextField.setText("");

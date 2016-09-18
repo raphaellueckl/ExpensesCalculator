@@ -49,11 +49,6 @@ public class MessageToast extends VBox {
         });
     }
 
-    private void disableMessageToast() {
-        this.setVisible(false);
-        this.setOpacity(1);
-    }
-
     public void showErrorMessage(String message) {
         this.setVisible(true);
         this.msgLabel.setText(message);

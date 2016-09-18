@@ -107,18 +107,18 @@
                 <!-- column 2 -->
                 <Label text="%table.category" styleClass="app-labels" GridPane.columnIndex="2" GridPane.rowIndex="0" />
                 <ComboBox fx:id="expenseCategory" prefHeight="${buttonHeight}" GridPane.columnIndex="2" GridPane.rowIndex="1">
-                    <items>
+                    <!--<items>
                         <FXCollections fx:factory="observableArrayList">
                             <String fx:value="[None]" />
                             <String fx:value="[Add a category...]" />
                         </FXCollections>
-                    </items>
+                    </items>-->
                 </ComboBox>
                 <TextField fx:id="addCategoryTextField" promptText="%textfield.new_category_title" visible="false" prefHeight="${buttonHeight}" GridPane.columnIndex="2" GridPane.rowIndex="2" />
                 <!-- column 3 -->
                 <Label text="%table.period" styleClass="app-labels" GridPane.columnIndex="3" GridPane.rowIndex="0" />
                 <ComboBox fx:id="expensePeriod" prefHeight="${buttonHeight}" GridPane.columnIndex="3" GridPane.rowIndex="1">
-                    <items>
+                    <!-- <items>
                         <FXCollections fx:factory="observableArrayList">
                             <String fx:value="%combobox.year" />
                             <String fx:value="%combobox.six_months" />
@@ -127,7 +127,7 @@
                             <String fx:value="%combobox.week" />
                             <String fx:value="%combobox.day" />
                         </FXCollections>
-                    </items>
+                    </items> -->
                 </ComboBox>
                 <!-- column 4 -->
                 <Label text="%table.value" styleClass="app-labels" GridPane.columnIndex="4" GridPane.rowIndex="0" />
