@@ -71,12 +71,10 @@
 
 /* TableView style */
 .table-view {
-    /*-fx-background-color: transparent;*/
     -fx-background-color: rgba(153, 102, 51, 0.7);
 }
 
 .table-view:focused{
-    /*-fx-background-color: transparent;*/
     -fx-background-color: rgba(153, 102, 51, 0.7);
 }
 
@@ -89,7 +87,6 @@
 }
 
 .table-view .table-cell{
-    /*-fx-text-fill: #00ff00;*/
     -fx-text-fill: #00ff00;
 }
 
@@ -101,7 +98,6 @@
 .table-row-cell:odd{
     -fx-background-color: rgb(165, 114, 63);
     -fx-background-insets: 0, 0 0 1 0;
-    /*-fx-padding: 0.0em; /* 0 */
 }
 
 .table-row-cell:selected {

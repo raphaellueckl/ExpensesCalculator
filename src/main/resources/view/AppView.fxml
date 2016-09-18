@@ -17,6 +17,7 @@
 
 <?import javafx.scene.control.CheckBox?>
 
+<?import javafx.scene.text.Text?>
 <GridPane xmlns:fx="http://javafx.com/fxml">
     <fx:define>
         <Integer fx:id="buttonWidth" fx:value="75" />
@@ -118,16 +119,16 @@
                 <!-- column 3 -->
                 <Label text="%table.period" styleClass="app-labels" GridPane.columnIndex="3" GridPane.rowIndex="0" />
                 <ComboBox fx:id="expensePeriod" prefHeight="${buttonHeight}" GridPane.columnIndex="3" GridPane.rowIndex="1">
-                    <!-- <items>
+                    <!--<items>
                         <FXCollections fx:factory="observableArrayList">
-                            <String fx:value="%combobox.year" />
-                            <String fx:value="%combobox.six_months" />
-                            <String fx:value="%combobox.quarter" />
-                            <String fx:value="%combobox.month" />
-                            <String fx:value="%combobox.week" />
-                            <String fx:value="%combobox.day" />
+                            <Text text="%combobox.year" />
+                            <Text text="%combobox.six_months" />
+                            <Text text="%combobox.quarter" />
+                            <Text text="%combobox.month" />
+                            <Text text="%combobox.week" />
+                            <Text text="%combobox.day" />
                         </FXCollections>
-                    </items> -->
+                    </items>-->
                 </ComboBox>
                 <!-- column 4 -->
                 <Label text="%table.value" styleClass="app-labels" GridPane.columnIndex="4" GridPane.rowIndex="0" />

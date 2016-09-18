@@ -27,8 +27,7 @@ import java.util.*;
 /**
  * TODO:
  * - Exit Dialog: Don't close, if user presses [x]
- * - Translation from resource bundle
- * 
+ *
  * History:
  * V1.0:
  * - Basic implementation: Add/Load/Save/Delete/Edit/Calculate expenses
@@ -447,11 +446,11 @@ public class Calculator extends Application {
 
 	private void setStyleClassForNegativeOrPositiveValue(List<Label> labels, Double sum) {
 		for (Label label : labels) {
+			label.getStyleClass().remove("positive-value");
+			label.getStyleClass().remove("negative-value");
 			if (sum < 0) {
-				label.getStyleClass().remove("positive-value");
 				label.getStyleClass().add("negative-value");
 			} else {
-				label.getStyleClass().remove("negative-value");
 				label.getStyleClass().add("positive-value");
 			}
 		}
