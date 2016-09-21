@@ -121,12 +121,12 @@
                 <ComboBox fx:id="expensePeriod" prefHeight="${buttonHeight}" GridPane.columnIndex="3" GridPane.rowIndex="1">
                     <!--<items>
                         <FXCollections fx:factory="observableArrayList">
-                            <Text text="%combobox.year" />
-                            <Text text="%combobox.six_months" />
-                            <Text text="%combobox.quarter" />
-                            <Text text="%combobox.month" />
-                            <Text text="%combobox.week" />
-                            <Text text="%combobox.day" />
+                            <String fx:value="%combobox.year" />
+                            <String fx:value="%combobox.six_months" />
+                            <String fx:value="%combobox.quarter" />
+                            <String fx:value="%combobox.month" />
+                            <String fx:value="%combobox.week" />
+                            <String fx:value="%combobox.day" />
                         </FXCollections>
                     </items>-->
                 </ComboBox>
